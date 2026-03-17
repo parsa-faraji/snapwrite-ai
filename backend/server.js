@@ -4,15 +4,17 @@ import OpenAI from "openai";
 // ── Config ──────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3001;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const AI_PROVIDER = process.env.AI_PROVIDER || "openai"; // "openai" or "anthropic"
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "*").split(",");
 const RATE_LIMIT_PER_IP = 30; // requests per hour per IP
 
-if (!OPENAI_API_KEY) {
-  console.error("OPENAI_API_KEY environment variable is required");
+if (!OPENAI_API_KEY && !ANTHROPIC_API_KEY) {
+  console.error("Either OPENAI_API_KEY or ANTHROPIC_API_KEY environment variable is required");
   process.exit(1);
 }
 
-const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+const openai = OPENAI_API_KEY ? new OpenAI({ apiKey: OPENAI_API_KEY }) : null;
 
 // ── Rate limiter (in-memory, resets hourly) ─────────────────────────
 const rateLimits = new Map();
@@ -61,6 +63,59 @@ function buildPrompt(action, text) {
   return fn(text);
 }
 
+// ── AI Provider Calls ───────────────────────────────────────────────
+
+async function callOpenAI(prompt) {
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: SYSTEM },
+      { role: "user", content: prompt },
+    ],
+    max_tokens: 2048,
+    temperature: 0.5,
+  });
+  return completion.choices[0].message.content.trim();
+}
+
+async function callAnthropic(prompt) {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 2048,
+      system: SYSTEM,
+      messages: [{ role: "user", content: prompt }],
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `Anthropic API error ${res.status}`);
+  }
+
+  const json = await res.json();
+  return json.content[0].text.trim();
+}
+
+async function callAI(prompt) {
+  // Use Anthropic if configured and selected, otherwise OpenAI
+  if (AI_PROVIDER === "anthropic" && ANTHROPIC_API_KEY) {
+    return callAnthropic(prompt);
+  }
+  if (openai) {
+    return callOpenAI(prompt);
+  }
+  // Fallback: use whichever key is available
+  if (ANTHROPIC_API_KEY) return callAnthropic(prompt);
+  throw new Error("No AI provider configured");
+}
+
 // ── HTTP Server ─────────────────────────────────────────────────────
 const server = createServer(async (req, res) => {
   // CORS
@@ -81,7 +136,7 @@ const server = createServer(async (req, res) => {
   // Health check
   if (req.method === "GET" && req.url === "/") {
     res.writeHead(200, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ status: "ok", service: "snapwrite-api" }));
+    return res.end(JSON.stringify({ status: "ok", service: "snapwrite-api", provider: AI_PROVIDER }));
   }
 
   // Main endpoint
@@ -106,18 +161,7 @@ const server = createServer(async (req, res) => {
 
       const truncated = text.slice(0, 5000);
       const prompt = buildPrompt(action, truncated);
-
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: SYSTEM },
-          { role: "user", content: prompt },
-        ],
-        max_tokens: 2048,
-        temperature: 0.5,
-      });
-
-      const result = completion.choices[0].message.content.trim();
+      const result = await callAI(prompt);
 
       res.writeHead(200, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ result }));
@@ -144,5 +188,6 @@ function readBody(req) {
 }
 
 server.listen(PORT, () => {
-  console.log(`SnapWrite API running on port ${PORT}`);
+  const provider = AI_PROVIDER === "anthropic" && ANTHROPIC_API_KEY ? "Anthropic" : "OpenAI";
+  console.log(`SnapWrite API running on port ${PORT} (${provider})`);
 });

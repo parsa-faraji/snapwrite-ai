@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">S</div>
+        <div>
+          <div class="logo-title">SnapWrite AI</div>
+          <div class="logo-sub">Select text on any page to start</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usage -->
+    <div class="usage-card">
+      <div class="usage-header">
+        <span class="usage-label">Today's usage</span>
+        <span class="usage-count" id="usage-count">0 / 5</span>
+      </div>
+      <div class="usage-bar-bg">
+        <div class="usage-bar-fill" id="usage-bar"></div>
+      </div>
+      <div class="usage-hint" id="usage-hint">Free uses remaining today</div>
+    </div>
+
+    <!-- Pro badge (hidden by default) -->
+    <div class="pro-badge hidden" id="pro-badge">
+      <span class="pro-icon">&#9733;</span> Pro — Unlimited
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section-label">Quick Actions</div>
+    <div class="actions">
+      <button class="action" data-action="improve">
+        <span class="action-icon">&#10024;</span>
+        Improve Writing
+      </button>
+      <button class="action" data-action="fix">
+        <span class="action-icon">&#10003;</span>
+        Fix Grammar
+      </button>
+      <button class="action" data-action="summarize">
+        <span class="action-icon">&#9776;</span>
+        Summarize
+      </button>
+      <button class="action" data-action="translate">
+        <span class="action-icon">&#127760;</span>
+        Translate
+      </button>
+    </div>
+
+    <!-- Compose box -->
+    <div class="section-label">Write from scratch</div>
+    <div class="compose">
+      <textarea id="compose-input" placeholder="Type a prompt... e.g. 'Write a professional email declining a meeting'" rows="3"></textarea>
+      <button class="compose-btn" id="compose-btn">Generate</button>
+    </div>
+
+    <!-- Compose result -->
+    <div class="compose-result hidden" id="compose-result">
+      <div class="compose-text" id="compose-text"></div>
+      <button class="copy-btn" id="compose-copy">Copy</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <a href="#" id="settings-link">Settings</a>
+      <span class="dot">·</span>
+      <a href="#" id="upgrade-link">Upgrade to Pro</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "SnapWrite AI",
+  "version": "1.0.0",
+  "description": "AI writing assistant for the entire web. Select any text to improve, rewrite, reply, summarize, fix grammar, or translate — instantly.",
+  "permissions": ["storage", "activeTab", "contextMenus"],
+  "host_permissions": [
+    "https://api.openai.com/*",
+    "https://api.anthropic.com/*",
+    "http://localhost:3001/*",
+    "https://*.railway.app/*",
+    "https://*.fly.dev/*",
+    "https://*.render.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SnapWrite AI"
+  },
+  "options_page": "options.html",
+  "commands": {
+    "trigger-snapwrite": {
+      "suggested_key": {
+        "default": "Alt+Q",
+        "mac": "Alt+Q"
+      },
+      "description": "Open SnapWrite toolbar on selected text"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

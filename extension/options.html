@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapWrite AI — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="page">
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo-icon">S</div>
+        <div>
+          <h1>SnapWrite AI Settings</h1>
+          <p class="subtitle">Configure your AI writing assistant</p>
+        </div>
+      </div>
+
+      <!-- Status banner -->
+      <div class="banner" id="status-banner">
+        <span id="status-icon">&#9888;</span>
+        <span id="status-text">API key not set — add one below to get started</span>
+      </div>
+
+      <!-- Provider -->
+      <div class="card">
+        <h2>AI Provider</h2>
+        <p class="hint">Choose which AI model powers your writing assistant.</p>
+
+        <div class="radio-group">
+          <label class="radio-card">
+            <input type="radio" name="provider" value="openai" checked>
+            <div class="radio-content">
+              <strong>OpenAI (GPT-4o Mini)</strong>
+              <span>Fast, affordable, great quality. Recommended for most users.</span>
+            </div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="provider" value="anthropic">
+            <div class="radio-content">
+              <strong>Anthropic (Claude Haiku)</strong>
+              <span>Excellent at nuanced writing and longer content.</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- API Key -->
+      <div class="card">
+        <h2>API Key</h2>
+        <p class="hint" id="key-hint">
+          Get your OpenAI API key at
+          <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a>
+        </p>
+
+        <div class="input-group">
+          <input type="password" id="api-key" placeholder="sk-..." autocomplete="off">
+          <button class="toggle-vis" id="toggle-key" title="Show/hide key">&#128065;</button>
+        </div>
+
+        <p class="note">Your key is stored locally in your browser and never sent anywhere except the AI provider.</p>
+      </div>
+
+      <!-- Info -->
+      <div class="card">
+        <h2>How to Use</h2>
+        <p class="hint" style="margin-bottom:0">Select any text on any website and a toolbar will appear with AI actions: Improve, Reply, Rewrite, Summarize, Fix Grammar, and Translate (with language picker).</p>
+      </div>
+
+      <!-- Save -->
+      <button class="save-btn" id="save-btn">Save Settings</button>
+      <div class="save-status hidden" id="save-status">Settings saved!</div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>SnapWrite AI v1.0.0</p>
+        <p><a href="https://snapwrite.ai" target="_blank">Website</a> · <a href="mailto:support@snapwrite.ai">Support</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

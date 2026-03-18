@@ -143,6 +143,27 @@ const server = createServer(async (req, res) => {
     return res.end(JSON.stringify({ status: "ok", service: "snapwrite-api", provider: AI_PROVIDER }));
   }
 
+  // Waitlist endpoint
+  if (req.method === "POST" && req.url === "/api/waitlist") {
+    try {
+      const body = await readBody(req);
+      const { email } = JSON.parse(body);
+      if (!email) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "email required" }));
+      }
+      // Append to file for persistence
+      const fs = await import("node:fs/promises");
+      await fs.appendFile("waitlist.txt", `${email},${new Date().toISOString()}\n`);
+      console.log(`Waitlist signup: ${email}`);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ ok: true }));
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Failed to save" }));
+    }
+  }
+
   // Main endpoint
   if (req.method === "POST" && req.url === "/api/generate") {
     const ip =

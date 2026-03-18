@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SnapWrite AI",
   "version": "1.0.0",
-  "description": "AI writing assistant for the entire web. Select any text to improve, rewrite, reply, summarize, fix grammar, or translate — instantly.",
+  "description": "Select any text to improve, rewrite, reply, summarize, fix grammar, or translate with AI — instantly.",
   "permissions": ["storage", "activeTab", "contextMenus"],
   "host_permissions": [
     "https://api.openai.com/*",

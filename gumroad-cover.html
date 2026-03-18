@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 40px; background: #f5f5f5; }
+
+  .cover {
+    width: 1280px;
+    height: 720px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255,255,255,0.08) 0%, transparent 40%);
+  }
+
+  .cover-content {
+    text-align: center;
+    z-index: 1;
+    color: white;
+  }
+
+  .cover-logo {
+    font-size: 80px;
+    font-weight: 800;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .cover-icon {
+    width: 100px;
+    height: 100px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+
+  .cover-icon span {
+    font-size: 52px;
+    font-weight: 800;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .cover-tagline {
+    font-size: 32px;
+    font-weight: 400;
+    opacity: 0.9;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    margin-bottom: 40px;
+  }
+
+  .cover-features {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+  }
+
+  .feature-pill {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    padding: 12px 28px;
+    font-size: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 500;
+  }
+
+  /* Thumbnail */
+  .thumb {
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .thumb::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.1) 0%, transparent 50%);
+  }
+
+  .thumb-content {
+    z-index: 1;
+    text-align: center;
+    color: white;
+  }
+
+  .thumb-icon {
+    width: 140px;
+    height: 140px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+    border: 3px solid rgba(255,255,255,0.3);
+  }
+
+  .thumb-icon span {
+    font-size: 72px;
+    font-weight: 800;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .thumb-name {
+    font-size: 52px;
+    font-weight: 800;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+  }
+
+  .thumb-sub {
+    font-size: 24px;
+    opacity: 0.85;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .label {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #333;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="label">Cover Image (1280x720) — right-click → Save Image As</div>
+  <div class="cover">
+    <div class="cover-content">
+      <div class="cover-icon"><span>S</span></div>
+      <div class="cover-logo">SnapWrite AI</div>
+      <div class="cover-tagline">AI Writing Assistant for Chrome</div>
+      <div class="cover-features">
+        <div class="feature-pill">✍️ Improve Writing</div>
+        <div class="feature-pill">🌍 Translate</div>
+        <div class="feature-pill">📝 Summarize</div>
+        <div class="feature-pill">💬 Smart Reply</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="label">Thumbnail (600x600) — right-click → Save Image As</div>
+  <div class="thumb">
+    <div class="thumb-content">
+      <div class="thumb-icon"><span>S</span></div>
+      <div class="thumb-name">SnapWrite AI</div>
+      <div class="thumb-sub">Pro Membership</div>
+    </div>
+  </div>
+</body>
+</html>

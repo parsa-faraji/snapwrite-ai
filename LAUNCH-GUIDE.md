@@ -67,7 +67,7 @@ When `BACKEND_URL` is set, users don't need to configure API keys at all — the
 3. Go to **Payment Links** → create one for this product
 4. Copy the payment link URL
 5. Update these files with your payment link:
-   - `popup.js` — the `snapwrite.ai/pricing` URL
+   - `popup.js` — the payment URL
    - `website/index.html` — the "Start 7-Day Free Trial" href
 
 ### Option B: ExtensionPay (Built for Chrome Extensions)
@@ -129,7 +129,7 @@ No signup required. Just install and start writing better.
 2. Go to https://vercel.com and import the repo
 3. Set root directory to `website`
 4. Deploy — you get a free URL instantly
-5. Add a custom domain (snapwrite.ai) if purchased
+5. Add a custom domain (snapwrite.io) if purchased
 
 ### Netlify (Free)
 1. Drag and drop the `website/` folder at https://app.netlify.com/drop

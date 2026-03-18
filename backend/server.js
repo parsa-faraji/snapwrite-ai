@@ -87,7 +87,7 @@ async function callAnthropic(prompt) {
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
+      model: "claude-haiku-4-5-20250514",
       max_tokens: 2048,
       system: SYSTEM,
       messages: [{ role: "user", content: prompt }],
@@ -103,25 +103,29 @@ async function callAnthropic(prompt) {
   return json.content[0].text.trim();
 }
 
-async function callAI(prompt) {
-  // Use Anthropic if configured and selected, otherwise OpenAI
-  if (AI_PROVIDER === "anthropic" && ANTHROPIC_API_KEY) {
+async function callAI(prompt, provider) {
+  // Per-request provider override takes precedence, then server-level AI_PROVIDER
+  const selected = provider || AI_PROVIDER;
+
+  if (selected === "anthropic" && ANTHROPIC_API_KEY) {
     return callAnthropic(prompt);
   }
-  if (openai) {
+  if (selected === "openai" && openai) {
     return callOpenAI(prompt);
   }
   // Fallback: use whichever key is available
+  if (openai) return callOpenAI(prompt);
   if (ANTHROPIC_API_KEY) return callAnthropic(prompt);
   throw new Error("No AI provider configured");
 }
 
 // ── HTTP Server ─────────────────────────────────────────────────────
 const server = createServer(async (req, res) => {
-  // CORS
+  // CORS — allow chrome-extension:// origins and configured origins
   const origin = req.headers.origin || "*";
+  const isChromeExtension = origin.startsWith("chrome-extension://");
   const allowOrigin =
-    ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin)
+    ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin) || isChromeExtension
       ? origin
       : "";
   res.setHeader("Access-Control-Allow-Origin", allowOrigin);
@@ -152,7 +156,7 @@ const server = createServer(async (req, res) => {
 
     try {
       const body = await readBody(req);
-      const { action, text } = JSON.parse(body);
+      const { action, text, provider } = JSON.parse(body);
 
       if (!action || !text) {
         res.writeHead(400, { "Content-Type": "application/json" });
@@ -161,7 +165,7 @@ const server = createServer(async (req, res) => {
 
       const truncated = text.slice(0, 5000);
       const prompt = buildPrompt(action, truncated);
-      const result = await callAI(prompt);
+      const result = await callAI(prompt, provider);
 
       res.writeHead(200, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ result }));

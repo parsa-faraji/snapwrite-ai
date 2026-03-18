@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; padding: 40px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: white; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  p.main { color: #999; margin-bottom: 40px; }
+  h2 { margin: 40px 0 8px; font-size: 20px; color: #a78bfa; }
+  p.info { color: #666; margin-bottom: 12px; font-size: 14px; }
+  canvas { display: block; border: 1px solid #333; margin-bottom: 30px; border-radius: 8px; }
+</style>
+</head>
+<body>
+<h1>SnapWrite AI — Chrome Web Store Assets</h1>
+<p class="main">Right-click each canvas → "Save Image As" → PNG</p>
+
+<h2>1. Store Icon (128x128)</h2>
+<p class="info">Drop into "Store icon"</p>
+<canvas id="icon" width="128" height="128"></canvas>
+
+<h2>2. Screenshot 1 — Main Demo (1280x800)</h2>
+<p class="info">Drop into "Screenshots" — shows the toolbar in action</p>
+<canvas id="ss1" width="1280" height="800"></canvas>
+
+<h2>3. Screenshot 2 — Features Grid (1280x800)</h2>
+<p class="info">Drop into "Screenshots" — shows all 6 features</p>
+<canvas id="ss2" width="1280" height="800"></canvas>
+
+<h2>4. Screenshot 3 — How It Works (1280x800)</h2>
+<p class="info">Drop into "Screenshots" — 3-step flow</p>
+<canvas id="ss3" width="1280" height="800"></canvas>
+
+<h2>5. Small Promo Tile (440x280)</h2>
+<p class="info">Drop into "Small promo tile"</p>
+<canvas id="small" width="440" height="280"></canvas>
+
+<h2>6. Marquee Promo Tile (1400x560)</h2>
+<p class="info">Drop into "Marquee promo tile"</p>
+<canvas id="marquee" width="1400" height="560"></canvas>
+
+<script>
+// ── Shared helpers ──
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function drawGlowCircle(ctx, x, y, r, color, alpha) {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0, color);
+  g.addColorStop(1, 'transparent');
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+function premiumBg(ctx, w, h) {
+  const g = ctx.createLinearGradient(0, 0, w, h);
+  g.addColorStop(0, '#0f0a1e');
+  g.addColorStop(0.4, '#1a1145');
+  g.addColorStop(1, '#0d0b1a');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, w, h);
+  drawGlowCircle(ctx, w * 0.15, h * 0.7, w * 0.35, '#7c3aed', 0.08);
+  drawGlowCircle(ctx, w * 0.85, h * 0.2, w * 0.3, '#6366f1', 0.06);
+  drawGlowCircle(ctx, w * 0.5, h * 0.5, w * 0.2, '#a78bfa', 0.04);
+}
+
+function drawBrowserWindow(ctx, x, y, w, h) {
+  // Shadow
+  ctx.shadowColor = 'rgba(0,0,0,0.4)';
+  ctx.shadowBlur = 30;
+  ctx.shadowOffsetY = 10;
+  roundRect(ctx, x, y, w, h, 12);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetY = 0;
+
+  // Title bar
+  const g = ctx.createLinearGradient(x, y, x, y + 40);
+  g.addColorStop(0, '#f8f9fa');
+  g.addColorStop(1, '#f1f3f5');
+  roundRect(ctx, x, y, w, 40, 12);
+  ctx.fillStyle = g;
+  ctx.fill();
+  ctx.fillStyle = '#f1f3f5';
+  ctx.fillRect(x, y + 28, w, 12);
+
+  // Dots
+  ctx.fillStyle = '#ff5f57'; ctx.beginPath(); ctx.arc(x + 20, y + 20, 6, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#febc2e'; ctx.beginPath(); ctx.arc(x + 40, y + 20, 6, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#28c840'; ctx.beginPath(); ctx.arc(x + 60, y + 20, 6, 0, Math.PI*2); ctx.fill();
+
+  // URL bar
+  roundRect(ctx, x + 90, y + 8, w - 120, 24, 6);
+  ctx.fillStyle = '#e9ecef';
+  ctx.fill();
+}
+
+function drawToolbar(ctx, x, y, activeIdx) {
+  // Toolbar shadow
+  ctx.shadowColor = 'rgba(79, 70, 229, 0.4)';
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetY = 4;
+  roundRect(ctx, x, y, 540, 52, 14);
+  const tbg = ctx.createLinearGradient(x, y, x + 540, y);
+  tbg.addColorStop(0, '#1e1b4b');
+  tbg.addColorStop(1, '#312e81');
+  ctx.fillStyle = tbg;
+  ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetY = 0;
+
+  // Border glow
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.4)';
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, x, y, 540, 52, 14);
+  ctx.stroke();
+
+  const buttons = [
+    { icon: '✨', label: 'Improve' },
+    { icon: '💬', label: 'Reply' },
+    { icon: '✍️', label: 'Rewrite' },
+    { icon: '📝', label: 'Summarize' },
+    { icon: '🔧', label: 'Fix' },
+    { icon: '🌍', label: 'Translate' }
+  ];
+
+  ctx.textAlign = 'center';
+  buttons.forEach((btn, i) => {
+    const bx = x + 10 + i * 88;
+    roundRect(ctx, bx, y + 8, 80, 36, 10);
+    if (i === activeIdx) {
+      const bg = ctx.createLinearGradient(bx, y + 8, bx, y + 44);
+      bg.addColorStop(0, '#6366f1');
+      bg.addColorStop(1, '#4f46e5');
+      ctx.fillStyle = bg;
+    } else {
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+    }
+    ctx.fill();
+
+    ctx.font = '13px -apple-system, sans-serif';
+    ctx.fillStyle = i === activeIdx ? '#ffffff' : 'rgba(255,255,255,0.7)';
+    ctx.fillText(btn.icon + ' ' + btn.label, bx + 40, y + 31);
+  });
+}
+
+// ── 1. ICON ──
+(function() {
+  const c = document.getElementById('icon');
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 128, 128);
+  g.addColorStop(0, '#6366f1');
+  g.addColorStop(1, '#7c3aed');
+  roundRect(ctx, 0, 0, 128, 128, 28);
+  ctx.fillStyle = g;
+  ctx.fill();
+
+  // Subtle inner shine
+  const shine = ctx.createLinearGradient(0, 0, 128, 0);
+  shine.addColorStop(0, 'rgba(255,255,255,0.15)');
+  shine.addColorStop(0.5, 'transparent');
+  roundRect(ctx, 0, 0, 128, 128, 28);
+  ctx.fillStyle = shine;
+  ctx.fill();
+
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 72px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(0,0,0,0.2)';
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetY = 2;
+  ctx.fillText('S', 64, 68);
+})();
+
+// ── 2. SCREENSHOT 1 — Main Demo ──
+(function() {
+  const c = document.getElementById('ss1');
+  const ctx = c.getContext('2d');
+  premiumBg(ctx, 1280, 800);
+
+  // Headline
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 42px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillText('AI Writing Assistant That Works Everywhere', 640, 60);
+
+  ctx.fillStyle = '#a78bfa';
+  ctx.font = '20px -apple-system, sans-serif';
+  ctx.fillText('Select text on any website → Get instant AI-powered improvements', 640, 95);
+
+  // Browser window
+  drawBrowserWindow(ctx, 140, 130, 1000, 550);
+
+  // URL text
+  ctx.fillStyle = '#868e96';
+  ctx.font = '12px -apple-system, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('🔒 mail.google.com/compose', 250, 154);
+
+  // Email UI elements
+  ctx.fillStyle = '#495057';
+  ctx.font = '600 14px -apple-system, sans-serif';
+  ctx.fillText('To:', 175, 198);
+  ctx.fillStyle = '#868e96';
+  ctx.font = '14px -apple-system, sans-serif';
+  ctx.fillText('team@startup.com', 200, 198);
+
+  ctx.fillStyle = '#495057';
+  ctx.font = '600 14px -apple-system, sans-serif';
+  ctx.fillText('Subject:', 175, 224);
+  ctx.fillStyle = '#495057';
+  ctx.font = '14px -apple-system, sans-serif';
+  ctx.fillText('Q3 Product Roadmap Update', 230, 224);
+
+  // Divider
+  ctx.strokeStyle = '#e9ecef';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(175, 240); ctx.lineTo(1105, 240); ctx.stroke();
+
+  // Email body text
+  ctx.fillStyle = '#495057';
+  ctx.font = '14px -apple-system, sans-serif';
+  const emailLines = [
+    'Hi team,',
+    '',
+    'I wanted to share a quick update on where we stand with the Q3 roadmap.',
+    'We have been making good progress across all workstreams and I think',
+    'we are in a strong position to hit our targets. The engineering team has',
+    'been doing great work on the new features and the design team has',
+    'finalized the mockups for the dashboard redesign.',
+    '',
+    'Let me know if you have any questions.',
+    'Best, Sarah'
+  ];
+  emailLines.forEach((line, i) => {
+    ctx.fillText(line, 175, 268 + i * 22);
+  });
+
+  // Blue selection highlight
+  ctx.fillStyle = 'rgba(79, 70, 229, 0.12)';
+  roundRect(ctx, 170, 296, 880, 92, 4);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(79, 70, 229, 0.3)';
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, 170, 296, 880, 92, 4);
+  ctx.stroke();
+
+  // Toolbar
+  drawToolbar(ctx, 200, 400, 0);
+
+  // Result box
+  ctx.shadowColor = 'rgba(34, 197, 94, 0.2)';
+  ctx.shadowBlur = 16;
+  roundRect(ctx, 200, 468, 700, 150, 12);
+  ctx.fillStyle = '#f0fdf4';
+  ctx.fill();
+  ctx.strokeStyle = '#86efac';
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, 200, 468, 700, 150, 12);
+  ctx.stroke();
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+
+  // Result header
+  ctx.fillStyle = '#16a34a';
+  ctx.font = 'bold 13px -apple-system, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('✨ Improved version', 224, 496);
+
+  ctx.fillStyle = '#374151';
+  ctx.font = '14px -apple-system, sans-serif';
+  const resultLines = [
+    "Here's a quick update on our Q3 roadmap progress. We're on track across",
+    "all workstreams and well-positioned to meet our targets. Engineering has",
+    "made strong progress on new features, and design has finalized mockups",
+    "for the dashboard redesign."
+  ];
+  resultLines.forEach((line, i) => {
+    ctx.fillText(line, 224, 520 + i * 20);
+  });
+
+  // Action buttons in result
+  roundRect(ctx, 224, 594, 80, 30, 8);
+  const cbg = ctx.createLinearGradient(224, 594, 224, 624);
+  cbg.addColorStop(0, '#6366f1');
+  cbg.addColorStop(1, '#4f46e5');
+  ctx.fillStyle = cbg;
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = '600 12px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('📋 Copy', 264, 613);
+
+  roundRect(ctx, 314, 594, 80, 30, 8);
+  const ibg = ctx.createLinearGradient(314, 594, 314, 624);
+  ibg.addColorStop(0, '#059669');
+  ibg.addColorStop(1, '#047857');
+  ctx.fillStyle = ibg;
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.fillText('⬇ Insert', 354, 613);
+
+  // Badge
+  roundRect(ctx, 940, 480, 140, 36, 18);
+  ctx.fillStyle = 'rgba(79, 70, 229, 0.1)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(79, 70, 229, 0.3)';
+  ctx.lineWidth = 1;
+  roundRect(ctx, 940, 480, 140, 36, 18);
+  ctx.stroke();
+  ctx.fillStyle = '#6366f1';
+  ctx.font = '600 13px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Powered by GPT-4o', 1010, 502);
+
+  // Bottom label
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = '14px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Works on Gmail, Google Docs, Twitter/X, LinkedIn, Slack, Reddit, and every other website', 640, 720);
+
+  // Brand badge bottom
+  roundRect(ctx, 520, 740, 240, 36, 18);
+  const bbg = ctx.createLinearGradient(520, 740, 760, 740);
+  bbg.addColorStop(0, 'rgba(99, 102, 241, 0.2)');
+  bbg.addColorStop(1, 'rgba(139, 92, 246, 0.2)');
+  ctx.fillStyle = bbg;
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 14px -apple-system, sans-serif';
+  ctx.fillText('⚡ SnapWrite AI — Free to Install', 640, 762);
+})();
+
+// ── 3. SCREENSHOT 2 — Features ──
+(function() {
+  const c = document.getElementById('ss2');
+  const ctx = c.getContext('2d');
+  premiumBg(ctx, 1280, 800);
+
+  // Header
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillText('6 Powerful AI Writing Actions', 640, 70);
+  ctx.fillStyle = '#a78bfa';
+  ctx.font = '20px -apple-system, sans-serif';
+  ctx.fillText('Everything you need to write better, available on every website', 640, 108);
+
+  const features = [
+    { icon: '✨', title: 'Improve', desc: 'Make writing clearer,\nmore polished & engaging', color: '#6366f1' },
+    { icon: '💬', title: 'Smart Reply', desc: 'Context-aware replies\nfor emails & messages', color: '#8b5cf6' },
+    { icon: '✍️', title: 'Rewrite', desc: 'Professional, casual,\nshorter, or longer', color: '#a78bfa' },
+    { icon: '📝', title: 'Summarize', desc: 'Key points in 2-3\nclear sentences', color: '#7c3aed' },
+    { icon: '🔧', title: 'Fix Grammar', desc: 'Correct spelling,\ngrammar & punctuation', color: '#6d28d9' },
+    { icon: '🌍', title: 'Translate', desc: '9+ languages: Spanish,\nFrench, Chinese & more', color: '#5b21b6' },
+  ];
+
+  features.forEach((f, i) => {
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const x = 90 + col * 380;
+    const y = 160 + row * 300;
+
+    // Card shadow
+    ctx.shadowColor = 'rgba(99, 102, 241, 0.15)';
+    ctx.shadowBlur = 24;
+    ctx.shadowOffsetY = 8;
+    roundRect(ctx, x, y, 350, 260, 20);
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    ctx.fill();
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+    // Card border
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    roundRect(ctx, x, y, 350, 260, 20);
+    ctx.stroke();
+
+    // Icon circle
+    const iconGrad = ctx.createRadialGradient(x + 175, y + 65, 0, x + 175, y + 65, 40);
+    iconGrad.addColorStop(0, f.color + '40');
+    iconGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = iconGrad;
+    ctx.beginPath(); ctx.arc(x + 175, y + 65, 40, 0, Math.PI*2); ctx.fill();
+
+    roundRect(ctx, x + 145, y + 30, 60, 60, 16);
+    ctx.fillStyle = f.color + '25';
+    ctx.fill();
+    ctx.strokeStyle = f.color + '50';
+    ctx.lineWidth = 1;
+    roundRect(ctx, x + 145, y + 30, 60, 60, 16);
+    ctx.stroke();
+
+    ctx.font = '32px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(f.icon, x + 175, y + 68);
+
+    // Title
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 24px -apple-system, sans-serif';
+    ctx.fillText(f.title, x + 175, y + 130);
+
+    // Description
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '15px -apple-system, sans-serif';
+    f.desc.split('\n').forEach((line, li) => {
+      ctx.fillText(line, x + 175, y + 165 + li * 22);
+    });
+
+    // Before → After example
+    roundRect(ctx, x + 25, y + 210, 300, 32, 8);
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    ctx.fill();
+  });
+
+  // Bottom CTA
+  roundRect(ctx, 460, 740, 360, 42, 21);
+  const ctag = ctx.createLinearGradient(460, 740, 820, 740);
+  ctag.addColorStop(0, '#6366f1');
+  ctag.addColorStop(1, '#7c3aed');
+  ctx.fillStyle = ctag;
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 16px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Install Free — No API Key Required', 640, 765);
+})();
+
+// ── 4. SCREENSHOT 3 — How It Works ──
+(function() {
+  const c = document.getElementById('ss3');
+  const ctx = c.getContext('2d');
+  premiumBg(ctx, 1280, 800);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 44px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.fillText('How It Works', 640, 70);
+  ctx.fillStyle = '#a78bfa';
+  ctx.font = '20px -apple-system, sans-serif';
+  ctx.fillText('Three simple steps. No setup, no API keys, no hassle.', 640, 108);
+
+  const steps = [
+    { num: '1', title: 'Select Text', desc: 'Highlight any text on\nany website', icon: '🖱️' },
+    { num: '2', title: 'Choose Action', desc: 'Pick from 6 AI-powered\nwriting tools', icon: '⚡' },
+    { num: '3', title: 'Get Results', desc: 'Copy or insert the\nimproved text instantly', icon: '✅' },
+  ];
+
+  steps.forEach((s, i) => {
+    const x = 100 + i * 390;
+    const y = 160;
+
+    // Card
+    ctx.shadowColor = 'rgba(99, 102, 241, 0.15)';
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetY = 10;
+    roundRect(ctx, x, y, 360, 420, 24);
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    ctx.fill();
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    roundRect(ctx, x, y, 360, 420, 24);
+    ctx.stroke();
+
+    // Step number
+    roundRect(ctx, x + 140, y + 30, 80, 80, 40);
+    const ng = ctx.createLinearGradient(x + 140, y + 30, x + 220, y + 110);
+    ng.addColorStop(0, '#6366f1');
+    ng.addColorStop(1, '#7c3aed');
+    ctx.fillStyle = ng;
+    ctx.fill();
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 36px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(s.num, x + 180, y + 80);
+
+    // Icon
+    ctx.font = '64px -apple-system, sans-serif';
+    ctx.fillText(s.icon, x + 180, y + 180);
+
+    // Title
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 26px -apple-system, sans-serif';
+    ctx.fillText(s.title, x + 180, y + 240);
+
+    // Description
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '16px -apple-system, sans-serif';
+    s.desc.split('\n').forEach((line, li) => {
+      ctx.fillText(line, x + 180, y + 278 + li * 24);
+    });
+
+    // Mini illustration area
+    roundRect(ctx, x + 30, y + 330, 300, 60, 12);
+    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+    ctx.fill();
+
+    if (i === 0) {
+      // Selection visual
+      ctx.fillStyle = 'rgba(99, 102, 241, 0.3)';
+      roundRect(ctx, x + 50, y + 345, 200, 14, 3); ctx.fill();
+      roundRect(ctx, x + 50, y + 363, 160, 14, 3); ctx.fill();
+    } else if (i === 1) {
+      // Mini toolbar
+      roundRect(ctx, x + 60, y + 342, 240, 36, 8);
+      ctx.fillStyle = '#1e1b4b';
+      ctx.fill();
+      ['Improve', 'Reply', 'Fix'].forEach((b, bi) => {
+        roundRect(ctx, x + 68 + bi * 78, y + 348, 70, 24, 6);
+        ctx.fillStyle = bi === 0 ? '#4f46e5' : 'rgba(255,255,255,0.1)';
+        ctx.fill();
+        ctx.fillStyle = 'white';
+        ctx.font = '10px -apple-system, sans-serif';
+        ctx.fillText(b, x + 103 + bi * 78, y + 364);
+      });
+    } else {
+      // Result preview
+      roundRect(ctx, x + 50, y + 340, 260, 40, 8);
+      ctx.fillStyle = '#f0fdf4';
+      ctx.fill();
+      ctx.fillStyle = '#16a34a';
+      ctx.font = '11px -apple-system, sans-serif';
+      ctx.fillText('Your improved text here ✨', x + 180, y + 364);
+    }
+
+    // Arrow between cards
+    if (i < 2) {
+      ctx.fillStyle = '#a78bfa';
+      ctx.font = '32px -apple-system, sans-serif';
+      ctx.fillText('→', x + 370, y + 210);
+    }
+  });
+
+  // Bottom stats
+  const stats = [
+    { num: '5', label: 'Free uses/day' },
+    { num: '6', label: 'AI actions' },
+    { num: '9+', label: 'Languages' },
+    { num: '0', label: 'Setup needed' },
+  ];
+  stats.forEach((st, i) => {
+    const sx = 180 + i * 260;
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 36px -apple-system, sans-serif';
+    ctx.fillText(st.num, sx, 660);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '15px -apple-system, sans-serif';
+    ctx.fillText(st.label, sx, 688);
+  });
+
+  // Bottom CTA
+  roundRect(ctx, 440, 720, 400, 44, 22);
+  const ctag = ctx.createLinearGradient(440, 720, 840, 720);
+  ctag.addColorStop(0, '#6366f1');
+  ctag.addColorStop(1, '#7c3aed');
+  ctx.fillStyle = ctag;
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 16px -apple-system, sans-serif';
+  ctx.fillText('Add to Chrome — Free', 640, 746);
+})();
+
+// ── 5. Small Promo Tile 440x280 ──
+(function() {
+  const c = document.getElementById('small');
+  const ctx = c.getContext('2d');
+
+  const g = ctx.createLinearGradient(0, 0, 440, 280);
+  g.addColorStop(0, '#1e1b4b');
+  g.addColorStop(0.5, '#312e81');
+  g.addColorStop(1, '#4c1d95');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 440, 280);
+  drawGlowCircle(ctx, 100, 200, 150, '#7c3aed', 0.1);
+  drawGlowCircle(ctx, 380, 60, 120, '#6366f1', 0.08);
+
+  // Icon
+  roundRect(ctx, 178, 30, 84, 84, 22);
+  const ig = ctx.createLinearGradient(178, 30, 262, 114);
+  ig.addColorStop(0, '#6366f1');
+  ig.addColorStop(1, '#7c3aed');
+  ctx.fillStyle = ig;
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 44px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('S', 220, 75);
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 28px -apple-system, sans-serif';
+  ctx.fillText('SnapWrite AI', 220, 152);
+
+  ctx.fillStyle = '#c4b5fd';
+  ctx.font = '15px -apple-system, sans-serif';
+  ctx.fillText('AI Writing Assistant for Chrome', 220, 180);
+
+  // Mini pills
+  const pills = ['✨ Improve', '💬 Reply', '🔧 Fix', '🌍 Translate'];
+  pills.forEach((p, i) => {
+    const px = 58 + i * 96;
+    roundRect(ctx, px, 210, 88, 28, 14);
+    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillText(p, px + 44, 228);
+  });
+
+  ctx.fillStyle = '#fbbf24';
+  ctx.font = 'bold 13px -apple-system, sans-serif';
+  ctx.fillText('Free to Install', 220, 262);
+})();
+
+// ── 6. Marquee Promo Tile 1400x560 ──
+(function() {
+  const c = document.getElementById('marquee');
+  const ctx = c.getContext('2d');
+
+  const g = ctx.createLinearGradient(0, 0, 1400, 560);
+  g.addColorStop(0, '#0f0a1e');
+  g.addColorStop(0.5, '#1a1145');
+  g.addColorStop(1, '#0d0b1a');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 1400, 560);
+  drawGlowCircle(ctx, 250, 350, 300, '#7c3aed', 0.08);
+  drawGlowCircle(ctx, 1150, 100, 250, '#6366f1', 0.06);
+
+  // Left content
+  ctx.textAlign = 'left';
+
+  // Logo + name
+  roundRect(ctx, 80, 80, 52, 52, 14);
+  const lg = ctx.createLinearGradient(80, 80, 132, 132);
+  lg.addColorStop(0, '#6366f1');
+  lg.addColorStop(1, '#7c3aed');
+  ctx.fillStyle = lg;
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 28px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('S', 106, 114);
+  ctx.textAlign = 'left';
+
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 24px -apple-system, sans-serif';
+  ctx.fillText('SnapWrite AI', 145, 113);
+
+  // Headline
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 48px -apple-system, sans-serif';
+  ctx.fillText('Write Better with AI.', 80, 200);
+  ctx.fillText('On Any Website.', 80, 255);
+
+  ctx.fillStyle = '#a78bfa';
+  ctx.font = '20px -apple-system, sans-serif';
+  ctx.fillText('Select text → Choose an action → Get instant results', 80, 300);
+
+  // Feature pills
+  const pills = ['✨ Improve', '💬 Reply', '✍️ Rewrite', '📝 Summarize', '🔧 Fix Grammar', '🌍 Translate'];
+  pills.forEach((pill, i) => {
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const px = 80 + col * 190;
+    const py = 340 + row * 50;
+    roundRect(ctx, px, py, 175, 38, 19);
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    roundRect(ctx, px, py, 175, 38, 19);
+    ctx.stroke();
+    ctx.fillStyle = 'white';
+    ctx.font = '14px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(pill, px + 87, py + 24);
+  });
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#fbbf24';
+  ctx.font = 'bold 16px -apple-system, sans-serif';
+  ctx.fillText('Free to use • No API key required • Pro: $9.99/mo', 80, 478);
+
+  // Right side — browser mockup
+  const mx = 720, my = 50;
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 40;
+  ctx.shadowOffsetY = 10;
+  roundRect(ctx, mx, my, 620, 460, 12);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+  // Browser bar
+  const tbg2 = ctx.createLinearGradient(mx, my, mx, my + 36);
+  tbg2.addColorStop(0, '#f8f9fa');
+  tbg2.addColorStop(1, '#f1f3f5');
+  roundRect(ctx, mx, my, 620, 36, 12);
+  ctx.fillStyle = tbg2;
+  ctx.fill();
+  ctx.fillStyle = tbg2;
+  ctx.fillRect(mx, my + 24, 620, 12);
+
+  ctx.fillStyle = '#ff5f57'; ctx.beginPath(); ctx.arc(mx + 18, my + 18, 5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#febc2e'; ctx.beginPath(); ctx.arc(mx + 36, my + 18, 5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#28c840'; ctx.beginPath(); ctx.arc(mx + 54, my + 18, 5, 0, Math.PI*2); ctx.fill();
+
+  roundRect(ctx, mx + 80, my + 7, 460, 22, 5);
+  ctx.fillStyle = '#e9ecef';
+  ctx.fill();
+  ctx.fillStyle = '#adb5bd';
+  ctx.font = '11px -apple-system, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('🔒 linkedin.com/messaging', mx + 95, my + 22);
+
+  // Text lines
+  ctx.fillStyle = '#dee2e6';
+  for (let i = 0; i < 5; i++) {
+    const lw = 300 + Math.random() * 250;
+    roundRect(ctx, mx + 30, my + 58 + i * 24, lw, 10, 3);
+    ctx.fill();
+  }
+
+  // Selected text
+  ctx.fillStyle = 'rgba(79, 70, 229, 0.1)';
+  roundRect(ctx, mx + 25, my + 100, 560, 50, 4);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(79, 70, 229, 0.25)';
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, mx + 25, my + 100, 560, 50, 4);
+  ctx.stroke();
+
+  // Toolbar
+  ctx.shadowColor = 'rgba(79, 70, 229, 0.3)';
+  ctx.shadowBlur = 16;
+  roundRect(ctx, mx + 30, my + 165, 460, 44, 12);
+  const tg = ctx.createLinearGradient(mx + 30, my + 165, mx + 490, my + 165);
+  tg.addColorStop(0, '#1e1b4b');
+  tg.addColorStop(1, '#312e81');
+  ctx.fillStyle = tg;
+  ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.3)';
+  ctx.lineWidth = 1;
+  roundRect(ctx, mx + 30, my + 165, 460, 44, 12);
+  ctx.stroke();
+
+  const tbtns = ['✨ Improve', '💬 Reply', '✍️ Rewrite', '📝 Sum.', '🔧 Fix', '🌍 Trans.'];
+  ctx.textAlign = 'center';
+  tbtns.forEach((b, i) => {
+    const bx = mx + 38 + i * 75;
+    roundRect(ctx, bx, my + 171, 68, 32, 8);
+    ctx.fillStyle = i === 0 ? '#4f46e5' : 'rgba(255,255,255,0.06)';
+    ctx.fill();
+    ctx.fillStyle = i === 0 ? 'white' : 'rgba(255,255,255,0.7)';
+    ctx.font = '10px -apple-system, sans-serif';
+    ctx.fillText(b, bx + 34, my + 191);
+  });
+
+  // Result
+  roundRect(ctx, mx + 30, my + 225, 560, 130, 12);
+  ctx.fillStyle = '#f0fdf4';
+  ctx.fill();
+  ctx.strokeStyle = '#86efac';
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, mx + 30, my + 225, 560, 130, 12);
+  ctx.stroke();
+
+  ctx.fillStyle = '#16a34a';
+  ctx.font = 'bold 12px -apple-system, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('✨ Improved', mx + 50, my + 252);
+
+  ctx.fillStyle = '#374151';
+  ctx.font = '12px -apple-system, sans-serif';
+  ctx.fillText('Your polished, improved text appears here instantly.', mx + 50, my + 278);
+  ctx.fillText('One click to copy or insert directly into the page.', mx + 50, my + 298);
+
+  roundRect(ctx, mx + 50, my + 320, 70, 24, 6);
+  ctx.fillStyle = '#4f46e5';
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = '600 11px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('📋 Copy', mx + 85, my + 336);
+
+  roundRect(ctx, mx + 130, my + 320, 70, 24, 6);
+  ctx.fillStyle = '#059669';
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.fillText('⬇ Insert', mx + 165, my + 336);
+
+  // More text lines below result
+  ctx.fillStyle = '#dee2e6';
+  ctx.textAlign = 'left';
+  for (let i = 0; i < 3; i++) {
+    const lw = 280 + Math.random() * 200;
+    roundRect(ctx, mx + 30, my + 375 + i * 22, lw, 10, 3);
+    ctx.fill();
+  }
+})();
+</script>
+</body>
+</html>

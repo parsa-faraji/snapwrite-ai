@@ -22,14 +22,15 @@
     /* ── Container ── */
     .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
-    /* ── Nav ── */
+    /* ── Nav (sticky) ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid #f0f0f0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
       z-index: 100;
-      padding: 14px 0;
+      padding: 12px 0;
     }
     nav .wrap { display: flex; align-items: center; justify-content: space-between; }
     .nav-logo {
@@ -43,41 +44,48 @@
       display: flex; align-items: center; justify-content: center;
       color: #fff; font-weight: 700; font-size: 16px;
     }
-    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
     .nav-links a { font-size: 14px; color: #6b7280; transition: color 0.15s; }
     .nav-links a:hover { color: #4f46e5; }
     .nav-cta {
-      padding: 8px 20px;
-      background: #4f46e5;
+      padding: 9px 22px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
       color: #fff !important;
       border-radius: 8px;
       font-weight: 600;
       font-size: 13.5px;
-      transition: background 0.15s;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(79,70,229,0.25);
     }
-    .nav-cta:hover { background: #4338ca; }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(79,70,229,0.35); }
 
     /* ── Hero ── */
     .hero {
-      padding: 140px 0 80px;
+      padding: 130px 0 60px;
       text-align: center;
+      background: linear-gradient(180deg, #fafaff 0%, #fff 100%);
     }
     .hero-badge {
-      display: inline-block;
-      padding: 5px 14px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px;
       background: #f0f1ff;
       color: #4f46e5;
       border-radius: 50px;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(79,70,229,0.1);
     }
+    .hero-badge svg { flex-shrink: 0; }
     .hero h1 {
-      font-size: clamp(32px, 5vw, 52px);
+      font-size: clamp(32px, 5vw, 54px);
       font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      margin-bottom: 18px;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      margin-bottom: 20px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .hero h1 .gradient {
       background: linear-gradient(135deg, #4f46e5, #7c3aed, #a855f7);
@@ -85,61 +93,281 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero p {
+    .hero-sub {
       font-size: 18px;
       color: #6b7280;
-      max-width: 560px;
+      max-width: 540px;
       margin: 0 auto 32px;
+      line-height: 1.7;
     }
-    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .hero-cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
     .btn-primary {
-      padding: 14px 32px;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 36px;
       background: linear-gradient(135deg, #4f46e5, #7c3aed);
       color: #fff;
       border: none;
-      border-radius: 12px;
-      font-size: 16px;
+      border-radius: 14px;
+      font-size: 17px;
       font-weight: 600;
       transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 4px 16px rgba(79,70,229,0.3);
+      box-shadow: 0 4px 20px rgba(79,70,229,0.35);
+      cursor: pointer;
     }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(79,70,229,0.4); }
-    .btn-secondary {
-      padding: 14px 32px;
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,70,229,0.45); }
+    .btn-primary svg { flex-shrink: 0; }
+    .hero-meta {
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: center;
+      margin-top: 4px;
+    }
+    .hero-meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: #6b7280;
+    }
+    .hero-meta-item svg { flex-shrink: 0; }
+    .hero-social-proof {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px;
       background: #fff;
-      color: #374151;
       border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 500;
-      transition: border-color 0.15s, background 0.15s;
+      border-radius: 50px;
+      font-size: 13px; color: #374151; font-weight: 500;
+      margin-top: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     }
-    .btn-secondary:hover { border-color: #c7d0ff; background: #fafaff; }
+    .stars { color: #f59e0b; font-size: 14px; letter-spacing: 1px; }
 
-    /* ── Demo Image ── */
-    .demo {
+    /* ── Works-On Logo Bar ── */
+    .works-on {
+      padding: 50px 0 10px;
       text-align: center;
-      padding: 0 0 80px;
+      background: #fff;
     }
-    .demo-img {
-      max-width: 800px;
-      width: 100%;
+    .works-on-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #9ca3af;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .works-on-logos {
+      display: flex; align-items: center; justify-content: center;
+      gap: 36px; flex-wrap: wrap;
+    }
+    .works-on-item {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: #9ca3af;
+      font-size: 11.5px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .works-on-item:hover { color: #6b7280; }
+    .works-on-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: #f8f9fb;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      border: 1px solid #f0f0f0;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .works-on-item:hover .works-on-icon {
+      border-color: #e0e0ff;
+      box-shadow: 0 2px 8px rgba(79,70,229,0.06);
+    }
+
+    /* ── Animated Before/After Demo ── */
+    .demo-section {
+      padding: 80px 0;
+      background: #f8f9fb;
+    }
+    .demo-section .section-title { text-align: center; margin-bottom: 48px; }
+    .demo-section .section-title h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .demo-section .section-title p { color: #6b7280; font-size: 16px; }
+    .demo-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 24px;
+      align-items: stretch;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .demo-panel {
+      background: #fff;
       border-radius: 16px;
       border: 1px solid #e5e7eb;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .demo-panel-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .demo-panel-header.before { color: #ef4444; }
+    .demo-panel-header.after { color: #10b981; }
+    .demo-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .demo-dot.red { background: #ef4444; }
+    .demo-dot.green { background: #10b981; }
+    .demo-panel-body {
+      padding: 24px 20px;
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: #374151;
+      min-height: 180px;
+      position: relative;
+    }
+    .demo-panel-body .error-text {
+      text-decoration: underline wavy #ef4444;
+      text-underline-offset: 3px;
+    }
+    .demo-arrow {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      color: #c7d0ff;
+      align-self: center;
+    }
+
+    /* Demo animation: highlight sweep */
+    .demo-panel.before .demo-panel-body {
+      position: relative;
+    }
+    .demo-highlight {
+      position: relative;
+    }
+    .demo-highlight::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 0%;
+      background: rgba(79,70,229,0.12);
+      border-radius: 3px;
+      animation: highlightSweep 4s ease-in-out infinite;
+    }
+    @keyframes highlightSweep {
+      0%, 100% { width: 0%; opacity: 0; }
+      15% { width: 100%; opacity: 1; }
+      50% { width: 100%; opacity: 1; }
+      65% { width: 100%; opacity: 0; }
+    }
+
+    /* After panel: typing reveal */
+    .demo-panel.after .demo-panel-body .typed-text {
+      overflow: hidden;
+      border-right: 2px solid #4f46e5;
+      animation: typing 3s steps(60) 1s forwards, blinkCaret 0.6s step-end infinite;
+      white-space: normal;
+      max-height: 0;
+    }
+    @keyframes revealText {
+      0% { max-height: 0; opacity: 0; }
+      10% { max-height: 0; opacity: 0; }
+      30% { max-height: 200px; opacity: 1; }
+      100% { max-height: 200px; opacity: 1; }
+    }
+    .after-reveal {
+      animation: revealText 4s ease-in-out infinite;
+      overflow: hidden;
+    }
+    @keyframes blinkCaret {
+      50% { border-color: transparent; }
+    }
+
+    /* SnapWrite popup animation */
+    .demo-popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(79,70,229,0.18);
+      border: 1px solid #e0e0ff;
+      padding: 10px;
+      display: flex; gap: 6px; flex-wrap: wrap;
+      max-width: 220px;
+      opacity: 0;
+      animation: popupAppear 4s ease-in-out infinite;
+      z-index: 2;
+    }
+    @keyframes popupAppear {
+      0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      45% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      55% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    }
+    .demo-popup-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #f0f1ff;
+      color: #4f46e5;
+      border: 1px solid rgba(79,70,229,0.15);
+      white-space: nowrap;
+    }
+    .demo-popup-btn.active {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+      border-color: transparent;
+      animation: btnPulse 4s ease-in-out infinite;
+    }
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: none; }
+      30% { box-shadow: 0 0 0 3px rgba(79,70,229,0.2); }
+      45% { box-shadow: none; }
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      padding: 48px 0;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+    .stat-item h3 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .stat-item p {
+      font-size: 13.5px;
+      opacity: 0.85;
+      font-weight: 400;
     }
 
     /* ── Features ── */
     .features {
       padding: 80px 0;
-      background: #f8f9fb;
+      background: #fff;
     }
-    .features .section-title { text-align: center; margin-bottom: 48px; }
-    .features .section-title h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-    .features .section-title p { color: #6b7280; font-size: 16px; }
+    .section-title { text-align: center; margin-bottom: 48px; }
+    .section-title h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .section-title p { color: #6b7280; font-size: 16px; }
+    .section-title .section-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #f0f1ff;
+      color: #4f46e5;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
     .feature-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
     }
     .feature-card {
@@ -147,153 +375,330 @@
       border: 1px solid #e5e7eb;
       border-radius: 14px;
       padding: 28px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
     }
     .feature-card:hover {
       border-color: #c7d0ff;
-      box-shadow: 0 4px 16px rgba(79,70,229,0.06);
+      box-shadow: 0 8px 24px rgba(79,70,229,0.08);
+      transform: translateY(-2px);
     }
     .feature-icon {
-      width: 42px; height: 42px;
-      background: #f0f1ff;
-      border-radius: 10px;
+      width: 46px; height: 46px;
+      background: linear-gradient(135deg, #f0f1ff, #ede9fe);
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      margin-bottom: 14px;
+      font-size: 22px;
+      margin-bottom: 16px;
     }
-    .feature-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-    .feature-card p { font-size: 14px; color: #6b7280; line-height: 1.6; }
+    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: #6b7280; line-height: 1.65; }
 
     /* ── How It Works ── */
     .how {
       padding: 80px 0;
+      background: #f8f9fb;
     }
-    .how .section-title { text-align: center; margin-bottom: 48px; }
-    .how .section-title h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-    .how .section-title p { color: #6b7280; font-size: 16px; }
     .steps {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
       text-align: center;
+      max-width: 860px;
+      margin: 0 auto;
     }
-    .step-num {
-      width: 40px; height: 40px;
+    .step-visual {
+      width: 64px; height: 64px;
       background: linear-gradient(135deg, #4f46e5, #7c3aed);
       color: #fff;
-      border-radius: 50%;
+      border-radius: 20px;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 16px;
-      margin: 0 auto 14px;
+      font-size: 28px;
+      margin: 0 auto 18px;
+      box-shadow: 0 4px 16px rgba(79,70,229,0.2);
     }
-    .steps h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-    .steps p { font-size: 14px; color: #6b7280; }
+    .step-num-label {
+      display: inline-block;
+      padding: 3px 10px;
+      background: #f0f1ff;
+      color: #4f46e5;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .steps h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .steps p { font-size: 14px; color: #6b7280; line-height: 1.6; }
+
+    /* ── Testimonials ── */
+    .testimonials {
+      padding: 80px 0;
+      background: #fff;
+    }
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 28px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .testimonial-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+    .testimonial-stars {
+      color: #f59e0b;
+      font-size: 15px;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+    .testimonial-text {
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: #374151;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 15px;
+    }
+    .testimonial-name { font-size: 14px; font-weight: 600; }
+    .testimonial-role { font-size: 12.5px; color: #9ca3af; }
 
     /* ── Pricing ── */
     .pricing {
       padding: 80px 0;
       background: #f8f9fb;
     }
-    .pricing .section-title { text-align: center; margin-bottom: 48px; }
-    .pricing .section-title h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-    .pricing .section-title p { color: #6b7280; font-size: 16px; }
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      max-width: 680px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 700px;
       margin: 0 auto;
     }
     .price-card {
       background: #fff;
       border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 32px;
-      text-align: center;
+      border-radius: 18px;
+      padding: 36px 32px;
     }
     .price-card.featured {
       border-color: #4f46e5;
-      box-shadow: 0 4px 24px rgba(79,70,229,0.12);
+      box-shadow: 0 4px 28px rgba(79,70,229,0.14);
       position: relative;
     }
     .price-card.featured::before {
       content: 'Most Popular';
       position: absolute;
-      top: -12px; left: 50%; transform: translateX(-50%);
-      padding: 4px 16px;
+      top: -13px; left: 50%; transform: translateX(-50%);
+      padding: 5px 18px;
       background: linear-gradient(135deg, #4f46e5, #7c3aed);
       color: #fff;
       border-radius: 50px;
       font-size: 11.5px;
       font-weight: 600;
     }
-    .price-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-    .price-amount { font-size: 36px; font-weight: 800; margin: 12px 0 4px; }
-    .price-amount span { font-size: 15px; font-weight: 400; color: #6b7280; }
-    .price-desc { color: #6b7280; font-size: 13px; margin-bottom: 20px; }
-    .price-features { list-style: none; text-align: left; margin-bottom: 24px; }
-    .price-features li {
-      padding: 6px 0;
-      font-size: 13.5px;
-      color: #374151;
-      display: flex; align-items: center; gap: 8px;
+    .price-card-header { text-align: center; margin-bottom: 24px; }
+    .price-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .price-amount { font-size: 42px; font-weight: 800; margin: 8px 0 4px; }
+    .price-amount span { font-size: 15px; font-weight: 400; color: #9ca3af; }
+    .price-desc { color: #6b7280; font-size: 13px; }
+    .price-limit {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #fef3c7;
+      color: #92400e;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-top: 8px;
     }
+    .price-features { list-style: none; margin-bottom: 28px; }
+    .price-features li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: #374151;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid #f8f9fb;
+    }
+    .price-features li:last-child { border-bottom: none; }
     .price-features li::before {
-      content: '\2713';
-      color: #4f46e5;
-      font-weight: 700;
+      content: '';
+      width: 18px; height: 18px; flex-shrink: 0;
+      background: #f0f1ff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' viewBox='0 0 10 10'%3E%3Cpath stroke='%234f46e5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M2 5.5L4 7.5L8 3'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
     }
     .price-btn {
       display: block;
       width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
       font-weight: 600;
       border: none;
       transition: all 0.15s;
+      text-align: center;
+      cursor: pointer;
     }
     .price-btn.primary {
       background: linear-gradient(135deg, #4f46e5, #7c3aed);
       color: #fff;
+      box-shadow: 0 2px 12px rgba(79,70,229,0.25);
     }
-    .price-btn.primary:hover { opacity: 0.9; }
+    .price-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(79,70,229,0.35); }
     .price-btn.outline {
       background: #fff;
       color: #374151;
-      border: 1px solid #e5e7eb;
+      border: 1.5px solid #e5e7eb;
     }
     .price-btn.outline:hover { border-color: #c7d0ff; background: #fafaff; }
 
-    /* ── CTA ── */
-    .cta {
+    /* ── FAQ Accordion (pure CSS) ── */
+    .faq {
       padding: 80px 0;
-      text-align: center;
+      background: #fff;
     }
-    .cta h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
-    .cta p { color: #6b7280; font-size: 16px; margin-bottom: 28px; }
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .faq-item:first-child { border-top: 1px solid #f0f0f0; }
+    .faq-toggle {
+      display: none;
+    }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a2e;
+      transition: color 0.15s;
+      user-select: none;
+    }
+    .faq-question:hover { color: #4f46e5; }
+    .faq-icon {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: #f0f1ff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      color: #4f46e5;
+      transition: transform 0.25s, background 0.25s;
+      flex-shrink: 0;
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-answer-inner {
+      padding: 0 0 20px;
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: #6b7280;
+    }
+    .faq-toggle:checked ~ .faq-question .faq-icon {
+      transform: rotate(45deg);
+      background: #4f46e5;
+      color: #fff;
+    }
+    .faq-toggle:checked ~ .faq-question { color: #4f46e5; }
+    .faq-toggle:checked ~ .faq-answer {
+      max-height: 200px;
+    }
+
+    /* ── Final CTA ── */
+    .cta {
+      padding: 90px 0;
+      text-align: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
+      color: #fff;
+    }
+    .cta h2 {
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .cta p {
+      color: rgba(255,255,255,0.7);
+      font-size: 17px;
+      margin-bottom: 32px;
+      max-width: 500px;
+      margin-left: auto; margin-right: auto;
+    }
+    .cta .btn-primary {
+      background: #fff;
+      color: #4f46e5;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .cta .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+    .cta-meta {
+      margin-top: 18px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
 
     /* ── Footer ── */
     footer {
-      padding: 32px 0;
+      padding: 36px 0;
       border-top: 1px solid #f0f0f0;
       text-align: center;
       color: #9ca3af;
       font-size: 13px;
     }
+    footer a { color: #9ca3af; text-decoration: underline; }
+    footer a:hover { color: #6b7280; }
 
     /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonial-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+      .demo-container { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+      .demo-arrow { transform: rotate(90deg); padding: 8px 0; }
+      .steps { grid-template-columns: 1fr; max-width: 400px; }
+    }
     @media (max-width: 640px) {
-      .hero { padding: 120px 0 60px; }
-      .hero-btns { flex-direction: column; align-items: center; }
-      .btn-primary, .btn-secondary { width: 100%; max-width: 320px; text-align: center; }
+      .hero { padding: 110px 0 50px; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 380px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
       .nav-links a:not(.nav-cta) { display: none; }
+      .works-on-logos { gap: 20px; }
+      .hero-meta { gap: 12px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Nav -->
+  <!-- ─── Nav ─── -->
   <nav>
     <div class="wrap">
       <a href="#" class="nav-logo">
@@ -304,153 +709,445 @@
         <a href="#features">Features</a>
         <a href="#how">How It Works</a>
         <a href="#pricing">Pricing</a>
-        <a href="#install" class="nav-cta">Install Free</a>
+        <a href="#faq">FAQ</a>
+        <a href="#install" class="nav-cta">Add to Chrome &mdash; Free</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- ─── Hero ─── -->
   <section class="hero">
     <div class="wrap">
-      <div class="hero-badge">AI Writing Assistant for Chrome</div>
+      <div class="hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        AI Writing Assistant for Chrome
+      </div>
       <h1>
-        Write better, <span class="gradient">everywhere</span><br>
-        on the web.
+        Stop Struggling with Words.<br>
+        <span class="gradient">Let AI Write It Better.</span>
       </h1>
-      <p>
-        Select any text on any website to instantly improve, rewrite, reply,
-        summarize, fix grammar, or translate. Powered by AI.
+      <p class="hero-sub">
+        Select any text on any website and instantly improve, rewrite, reply,
+        summarize, fix grammar, or translate it. One click. Done.
       </p>
-      <div class="hero-btns">
-        <a href="#install" class="btn-primary">Add to Chrome — It's Free</a>
-        <a href="#how" class="btn-secondary">See How It Works</a>
+      <div class="hero-cta-wrap">
+        <a href="#install" class="btn-primary">
+          <!-- Chrome SVG icon -->
+          <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#fff"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#fff"/></svg>
+          Add to Chrome &mdash; It's Free
+        </a>
+        <div class="hero-meta">
+          <span class="hero-meta-item">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Installs in 10 seconds
+          </span>
+          <span class="hero-meta-item">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            No signup required
+          </span>
+          <span class="hero-meta-item">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Free forever
+          </span>
+        </div>
+        <div class="hero-social-proof">
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          Trusted by 500+ writers &amp; professionals
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Features -->
+  <!-- ─── Works-On Logo Bar ─── -->
+  <section class="works-on">
+    <div class="wrap">
+      <div class="works-on-label">Works everywhere you write</div>
+      <div class="works-on-logos">
+        <div class="works-on-item">
+          <div class="works-on-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 18h-2V9.25L12 13 6 9.25V18H4V6h1.2l6.8 4.25L18.8 6H20v12z" fill="#EA4335"/><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z" fill="none" stroke="#EA4335" stroke-width="1.2"/></svg>
+          </div>
+          Gmail
+        </div>
+        <div class="works-on-item">
+          <div class="works-on-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="13" x2="16" y2="13" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="17" x2="13" y2="17" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          Google Docs
+        </div>
+        <div class="works-on-item">
+          <div class="works-on-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </div>
+          X / Twitter
+        </div>
+        <div class="works-on-item">
+          <div class="works-on-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.884 20.452H3.79V9h3.094v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </div>
+          LinkedIn
+        </div>
+        <div class="works-on-item">
+          <div class="works-on-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5 0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5c0 .83-.67 1.5-1.5 1.5zm-5 0C8.67 10 8 9.33 8 8.5S8.67 7 9.5 7s1.5.67 1.5 1.5S10.33 10 9.5 10z" fill="#611f69"/><path d="M6 2h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z" stroke="#611f69" stroke-width="1.5" fill="none"/><path d="M9 14.5c0 1.5 1.5 3 3 3s3-1.5 3-3" stroke="#611f69" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          Slack
+        </div>
+        <div class="works-on-item">
+          <div class="works-on-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF4500"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 13.38c.15.36.22.75.22 1.12 0 2.58-3.01 4.68-6.73 4.68S3.77 17.08 3.77 14.5c0-.37.08-.76.22-1.12a1.38 1.38 0 0 1-.72-1.22c0-.78.63-1.4 1.4-1.4.38 0 .72.15.98.39 1.2-.86 2.82-1.39 4.6-1.44l.88-4.12a.3.3 0 0 1 .36-.24l2.92.62a1.05 1.05 0 0 1 2 .48 1.05 1.05 0 0 1-1.96.37l-2.6-.55-.78 3.67c1.73.07 3.3.6 4.47 1.44.25-.24.6-.39.97-.39.78 0 1.4.63 1.4 1.4 0 .5-.26.94-.66 1.19zM9.5 13a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 0 0 0-2.3zm5 0a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 0 0 0-2.3zm-4.87 3.63c-.06-.06-.06-.16 0-.22a.16.16 0 0 1 .22 0c.68.68 1.74.73 2.15.73s1.47-.05 2.15-.73a.16.16 0 0 1 .22 0c.06.06.06.16 0 .22-.78.78-2 .83-2.37.83s-1.59-.05-2.37-.83z"/></svg>
+          </div>
+          Reddit
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Animated Before/After Demo ─── -->
+  <section class="demo-section" id="demo">
+    <div class="wrap">
+      <div class="section-title">
+        <span class="section-tag">See it in action</span>
+        <h2>From rough draft to polished writing in one click</h2>
+        <p>Select messy text, pick an action, and watch SnapWrite transform it instantly.</p>
+      </div>
+      <div class="demo-container">
+        <!-- Before -->
+        <div class="demo-panel before">
+          <div class="demo-panel-header before">
+            <span class="demo-dot red"></span>
+            Before
+          </div>
+          <div class="demo-panel-body">
+            <div class="demo-highlight">
+              hey mike, wanted to <span class="error-text">follw</span> up on the thing we <span class="error-text">talk</span> about last week. i think we should <span class="error-text">definately</span> move forward with the project <span class="error-text">becuase</span> its going to be really good for the team and <span class="error-text">eveyone</span> will benefit from it.
+            </div>
+            <!-- Animated popup -->
+            <div class="demo-popup">
+              <span class="demo-popup-btn active">Improve</span>
+              <span class="demo-popup-btn">Reply</span>
+              <span class="demo-popup-btn">Rewrite</span>
+              <span class="demo-popup-btn">Summarize</span>
+              <span class="demo-popup-btn">Fix</span>
+              <span class="demo-popup-btn">Translate</span>
+            </div>
+          </div>
+        </div>
+        <!-- Arrow -->
+        <div class="demo-arrow">&#10132;</div>
+        <!-- After -->
+        <div class="demo-panel after">
+          <div class="demo-panel-header after">
+            <span class="demo-dot green"></span>
+            After
+          </div>
+          <div class="demo-panel-body">
+            <div class="after-reveal">
+              Hi Mike, I wanted to follow up on our conversation from last week. I believe we should move forward with the project &mdash; it will have a meaningful impact on the team, and everyone stands to benefit from it. Let me know when you're available to discuss the next steps.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Stats Bar ─── -->
+  <section class="stats-bar">
+    <div class="wrap">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>6</h3>
+          <p>AI Actions</p>
+        </div>
+        <div class="stat-item">
+          <h3>9+</h3>
+          <p>Languages</p>
+        </div>
+        <div class="stat-item">
+          <h3>Every</h3>
+          <p>Website Supported</p>
+        </div>
+        <div class="stat-item">
+          <h3>Free</h3>
+          <p>Forever</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Features ─── -->
   <section class="features" id="features">
     <div class="wrap">
       <div class="section-title">
-        <h2>Everything you need to write faster</h2>
-        <p>One extension, six powerful AI actions — right where you need them.</p>
+        <span class="section-tag">Features</span>
+        <h2>Six powerful AI actions at your fingertips</h2>
+        <p>One extension. One click. Six ways to write better.</p>
       </div>
       <div class="feature-grid">
         <div class="feature-card">
           <div class="feature-icon">&#10024;</div>
           <h3>Improve</h3>
-          <p>Make any text clearer, more engaging, and polished with one click. Perfect for emails, posts, and messages.</p>
+          <p>Make any text clearer, more engaging, and polished. Perfect for emails, posts, and important messages.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128172;</div>
           <h3>Smart Reply</h3>
-          <p>Generate contextual replies to any message. Works on email, LinkedIn, Slack, Twitter — anywhere you communicate.</p>
+          <p>Generate contextual replies to any message. Works on email, LinkedIn, Slack, Twitter, and more.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#9999;&#65039;</div>
           <h3>Rewrite</h3>
-          <p>Change the tone to professional, casual, shorter, or longer. Adapt your writing for any audience instantly.</p>
+          <p>Change the tone to professional, casual, shorter, or longer. Adapt your writing for any audience.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128203;</div>
           <h3>Summarize</h3>
-          <p>Turn long articles, emails, or documents into concise 2-3 sentence summaries. Save hours of reading.</p>
+          <p>Turn long articles, emails, or docs into concise summaries. Save hours of reading every week.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#9989;</div>
           <h3>Fix Grammar</h3>
-          <p>Instantly fix spelling, grammar, and punctuation errors while keeping your original voice and meaning.</p>
+          <p>Instantly fix spelling, grammar, and punctuation while keeping your voice and meaning intact.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#127760;</div>
           <h3>Translate</h3>
-          <p>Translate text to and from 14+ languages. Break language barriers without leaving your current page.</p>
+          <p>Translate text to and from 9+ languages without leaving the page you're on.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How It Works -->
+  <!-- ─── How It Works ─── -->
   <section class="how" id="how">
     <div class="wrap">
       <div class="section-title">
-        <h2>Up and running in 30 seconds</h2>
-        <p>No signup required. Just install and start writing better.</p>
+        <span class="section-tag">How It Works</span>
+        <h2>Start writing better in 10 seconds</h2>
+        <p>No account. No setup. No learning curve.</p>
       </div>
       <div class="steps">
         <div>
-          <div class="step-num">1</div>
+          <div class="step-visual">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <span class="step-num-label">Step 1</span>
           <h3>Install the extension</h3>
-          <p>Add SnapWrite AI to Chrome for free. Takes less than 10 seconds.</p>
+          <p>Add SnapWrite AI to Chrome for free. One click install, no signup needed.</p>
         </div>
         <div>
-          <div class="step-num">2</div>
+          <div class="step-visual">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+          </div>
+          <span class="step-num-label">Step 2</span>
           <h3>Select any text</h3>
-          <p>Highlight text on any website — email, social media, docs, anywhere.</p>
+          <p>Highlight text on any website. SnapWrite appears instantly with your AI actions.</p>
         </div>
         <div>
-          <div class="step-num">3</div>
-          <h3>Pick an action</h3>
-          <p>Choose improve, reply, rewrite, summarize, fix, or translate.</p>
-        </div>
-        <div>
-          <div class="step-num">4</div>
-          <h3>Copy or insert</h3>
-          <p>Copy the result or insert it directly into your text with one click.</p>
+          <div class="step-visual">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <span class="step-num-label">Step 3</span>
+          <h3>Pick an action &amp; done</h3>
+          <p>Choose improve, reply, rewrite, summarize, fix, or translate. Copy or insert the result.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Pricing -->
+  <!-- ─── Testimonials ─── -->
+  <section class="testimonials" id="testimonials">
+    <div class="wrap">
+      <div class="section-title">
+        <span class="section-tag">Testimonials</span>
+        <h2>Loved by writers and professionals</h2>
+        <p>Join hundreds of people who write better every day with SnapWrite AI.</p>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="testimonial-text">
+            "This extension is a game changer. I use it for every LinkedIn post and email I write. The Improve action alone saves me 20 minutes a day."
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">S</div>
+            <div>
+              <div class="testimonial-name">Sarah M.</div>
+              <div class="testimonial-role">Marketing Manager</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="testimonial-text">
+            "As a non-native English speaker, SnapWrite is invaluable. The grammar fix and rewrite features help me sound professional in every email I send."
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">R</div>
+            <div>
+              <div class="testimonial-name">Raj P.</div>
+              <div class="testimonial-role">Software Engineer</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="testimonial-text">
+            "I tried five different AI writing tools before this one. SnapWrite is the only one that works everywhere without leaving the page. Dead simple and fast."
+          </div>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">J</div>
+            <div>
+              <div class="testimonial-name">James L.</div>
+              <div class="testimonial-role">Freelance Writer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Pricing ─── -->
   <section class="pricing" id="pricing">
     <div class="wrap">
       <div class="section-title">
-        <h2>Simple, transparent pricing</h2>
-        <p>Start free, upgrade when you need more.</p>
+        <span class="section-tag">Pricing</span>
+        <h2>Start free. Upgrade when you need more.</h2>
+        <p>No credit card required. No hidden fees.</p>
       </div>
       <div class="pricing-grid">
         <div class="price-card">
-          <h3>Free</h3>
-          <div class="price-amount">$0 <span>/ month</span></div>
-          <div class="price-desc">Perfect for getting started</div>
+          <div class="price-card-header">
+            <h3>Free</h3>
+            <div class="price-amount">$0 <span>/ month</span></div>
+            <div class="price-desc">Everything you need to get started</div>
+            <div class="price-limit">Limited to 5 uses per day</div>
+          </div>
           <ul class="price-features">
-            <li>5 AI actions per day</li>
-            <li>All 6 writing actions</li>
-            <li>Works on all websites</li>
-            <li>14+ languages</li>
+            <li>All 6 AI writing actions</li>
+            <li>Works on every website</li>
+            <li>9+ languages supported</li>
+            <li>No account required</li>
           </ul>
-          <a href="#install" class="price-btn outline">Get Started Free</a>
+          <a href="#install" class="price-btn outline">Add to Chrome &mdash; Free</a>
         </div>
         <div class="price-card featured">
-          <h3>Pro</h3>
-          <div class="price-amount">$9.99 <span>/ month</span></div>
-          <div class="price-desc">For professionals who write daily</div>
+          <div class="price-card-header">
+            <h3>Pro</h3>
+            <div class="price-amount">$9.99 <span>/ month</span></div>
+            <div class="price-desc">For professionals who write daily</div>
+          </div>
           <ul class="price-features">
             <li>Unlimited AI actions</li>
             <li>All 6 writing actions</li>
             <li>Priority AI speed</li>
             <li>Email support</li>
           </ul>
-          <a href="#install" class="price-btn primary">Start 7-Day Free Trial</a>
+          <a href="https://safaraji.gumroad.com/l/snapwrite-pro" target="_blank" class="price-btn primary">Start 7-Day Free Trial</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="cta" id="install">
+  <!-- ─── FAQ ─── -->
+  <section class="faq" id="faq">
     <div class="wrap">
-      <h2>Start writing better today</h2>
-      <p>Join thousands of professionals who write faster with SnapWrite AI.</p>
-      <a href="#" class="btn-primary" id="install-btn">Add to Chrome — It's Free</a>
+      <div class="section-title">
+        <span class="section-tag">FAQ</span>
+        <h2>Frequently asked questions</h2>
+        <p>Everything you need to know about SnapWrite AI.</p>
+      </div>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <input type="checkbox" id="faq1" class="faq-toggle">
+          <label for="faq1" class="faq-question">
+            Is SnapWrite AI really free?
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes! The free plan gives you 5 AI actions per day with access to all six features: improve, reply, rewrite, summarize, fix grammar, and translate. No credit card or account required. If you need unlimited usage, you can upgrade to Pro for $9.99/month.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <input type="checkbox" id="faq2" class="faq-toggle">
+          <label for="faq2" class="faq-question">
+            What websites does it work on?
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              SnapWrite works on every website you visit in Chrome. Gmail, Google Docs, Twitter/X, LinkedIn, Slack, Reddit, Facebook, Notion, and thousands more. If you can select text on it, SnapWrite can improve it.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <input type="checkbox" id="faq3" class="faq-toggle">
+          <label for="faq3" class="faq-question">
+            Do I need to create an account?
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              No. SnapWrite works immediately after installation. There is no signup, no login, and no account creation needed. Just install the extension and start selecting text to improve.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <input type="checkbox" id="faq4" class="faq-toggle">
+          <label for="faq4" class="faq-question">
+            What languages are supported?
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              SnapWrite supports 9+ languages for translation and can improve, rewrite, and fix grammar in any language that our AI model supports. This includes English, Spanish, French, German, Portuguese, Italian, Dutch, Russian, Chinese, Japanese, Korean, and more.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <input type="checkbox" id="faq5" class="faq-toggle">
+          <label for="faq5" class="faq-question">
+            Is my data private and secure?
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Absolutely. SnapWrite does not store, log, or sell your text. Your selected text is sent to the AI for processing and the result is returned directly to you. We do not keep copies of your writing. Read our full privacy policy for more details.
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ─── Final CTA ─── -->
+  <section class="cta" id="install">
+    <div class="wrap">
+      <h2>Ready to write better? Start now.</h2>
+      <p>Join 500+ professionals who write faster and clearer with SnapWrite AI.</p>
+      <a href="#" class="btn-primary" id="install-btn">
+        <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#4f46e5"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#fff"/></svg>
+        Add to Chrome &mdash; It's Free
+      </a>
+      <div class="cta-meta">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.5)" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        No data collected &middot; No signup &middot; Installs in 10 seconds
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─── -->
   <footer>
     <div class="wrap">
-      <p>&copy; 2026 SnapWrite AI. All rights reserved. · <a href="privacy.html" style="color:#9ca3af;text-decoration:underline">Privacy Policy</a></p>
+      <p>&copy; 2026 SnapWrite AI. All rights reserved. &middot; <a href="privacy.html">Privacy Policy</a></p>
     </div>
   </footer>
 

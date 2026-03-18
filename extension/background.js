@@ -4,7 +4,7 @@ const TRIAL_DAYS = 7;
 // ── Backend proxy URL (set this when you deploy your backend) ────────
 // When set, all API calls go through YOUR server — users don't need keys.
 // Leave empty to use direct API key mode (user provides their own key).
-const BACKEND_URL = ""; // e.g. "https://snapwrite-api.yourdomain.com"
+const BACKEND_URL = "https://snap-write-ai-production.up.railway.app";
 
 // ── Prompts ──────────────────────────────────────────────────────────
 
@@ -210,6 +210,13 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         sendResponse({ usage, limit: FREE_DAILY_LIMIT, pro, trialDays });
       }
     );
+    return true;
+  }
+
+  if (request.type === "IS_PRO") {
+    isPro().then((pro) => {
+      sendResponse({ pro });
+    });
     return true;
   }
 

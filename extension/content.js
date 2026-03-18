@@ -58,6 +58,121 @@
 
   let selectedText = "";
   let selectionRange = null;
+  let sessionResultCount = 0;
+
+  // Chrome Web Store URL (update with your real extension ID)
+  const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/snapwrite-ai/bpclponaiaeckhcpgfmojbkhkkgnlifg";
+  const CHROME_STORE_REVIEW_URL = CHROME_STORE_URL + "/reviews";
+
+  // ── Viral Growth Helpers ───────────────────────────────────────
+
+  async function checkIfPro() {
+    try {
+      const resp = await chrome.runtime.sendMessage({ type: "IS_PRO" });
+      return resp && resp.pro === true;
+    } catch {
+      return false;
+    }
+  }
+
+  async function getLifetimeResultCount() {
+    const data = await chrome.storage.local.get("snapwrite_lifetime_uses");
+    return data.snapwrite_lifetime_uses || 0;
+  }
+
+  async function incrementLifetimeResultCount() {
+    const current = await getLifetimeResultCount();
+    const next = current + 1;
+    await chrome.storage.local.set({ snapwrite_lifetime_uses: next });
+    return next;
+  }
+
+  async function hasShownSharePrompt() {
+    const data = await chrome.storage.local.get("snapwrite_share_shown");
+    return data.snapwrite_share_shown === true;
+  }
+
+  async function markSharePromptShown() {
+    await chrome.storage.local.set({ snapwrite_share_shown: true });
+  }
+
+  async function hasShownReviewPrompt() {
+    const data = await chrome.storage.local.get("snapwrite_review_shown");
+    return data.snapwrite_review_shown === true;
+  }
+
+  async function markReviewPromptShown() {
+    await chrome.storage.local.set({ snapwrite_review_shown: true });
+  }
+
+  function showPromoBanner(config) {
+    // Remove any existing promo banner
+    const existing = shadow.querySelector(".qw-promo-banner");
+    if (existing) existing.remove();
+
+    const banner = document.createElement("div");
+    banner.className = "qw-promo-banner";
+    banner.innerHTML = `
+      <div class="qw-promo-content">
+        <p class="qw-promo-text">${escapeHtml(config.message)}</p>
+        <div class="qw-promo-buttons">
+          <button class="qw-promo-action">${escapeHtml(config.actionLabel)}</button>
+          <button class="qw-promo-dismiss">${escapeHtml(config.dismissLabel)}</button>
+        </div>
+      </div>`;
+
+    // Position below the result panel
+    const rRect = result.getBoundingClientRect();
+    const scrollY = window.scrollY;
+    banner.style.left = result.style.left;
+    banner.style.top = (rRect.bottom + scrollY + 8) + "px";
+
+    shadow.appendChild(banner);
+
+    banner.querySelector(".qw-promo-action").addEventListener("click", () => {
+      config.onAction();
+      banner.remove();
+    });
+
+    banner.querySelector(".qw-promo-dismiss").addEventListener("click", () => {
+      if (config.onDismiss) config.onDismiss();
+      banner.remove();
+    });
+  }
+
+  async function maybeShowViralPrompts() {
+    const count = await incrementLifetimeResultCount();
+
+    if (count >= 3 && !(await hasShownSharePrompt())) {
+      await markSharePromptShown();
+      showPromoBanner({
+        message: "Enjoying SnapWrite AI? Share it with a friend! \uD83C\uDF89",
+        actionLabel: "Share",
+        dismissLabel: "Maybe Later",
+        onAction: () => {
+          navigator.clipboard.writeText(CHROME_STORE_URL);
+          // Brief feedback
+          const btn = shadow.querySelector(".qw-promo-action");
+          if (btn) btn.textContent = "Link Copied!";
+        },
+        onDismiss: () => {},
+      });
+      return;
+    }
+
+    if (count >= 10 && !(await hasShownReviewPrompt())) {
+      await markReviewPromptShown();
+      showPromoBanner({
+        message: "You\u2019ve used SnapWrite AI 10 times! \u2B50 Would you mind leaving a quick review?",
+        actionLabel: "Leave Review",
+        dismissLabel: "Not Now",
+        onAction: () => {
+          window.open(CHROME_STORE_REVIEW_URL, "_blank");
+        },
+        onDismiss: () => {},
+      });
+    }
+  }
 
   // ── Shadow DOM Setup ────────────────────────────────────────────
 
@@ -313,8 +428,14 @@
       </div>`;
     positionResult();
 
-    result.querySelector(".qw-copy").addEventListener("click", () => {
-      navigator.clipboard.writeText(text).then(() => {
+    result.querySelector(".qw-copy").addEventListener("click", async () => {
+      // Check if user is Pro to decide on watermark
+      const pro = await checkIfPro();
+      const copyText = pro
+        ? text
+        : text + "\n\n\u2014 Written with SnapWrite AI (Free Chrome Extension)";
+
+      navigator.clipboard.writeText(copyText).then(() => {
         const btn = result.querySelector(".qw-copy");
         btn.innerHTML = `${ICONS.check} Copied!`;
         setTimeout(() => (btn.innerHTML = `${ICONS.copy} Copy`), 1500);
@@ -327,6 +448,9 @@
     });
 
     result.querySelector(".qw-close").addEventListener("click", hideAll);
+
+    // Check for viral growth prompts (share / review)
+    maybeShowViralPrompts();
   }
 
   function showLimitReached() {
@@ -337,6 +461,9 @@
         <button class="qw-upgrade-btn">Upgrade — $9.99/mo</button>
       </div>`;
     positionResult();
+    result.querySelector(".qw-upgrade-btn").addEventListener("click", () => {
+      window.open("https://safaraji.gumroad.com/l/snapwrite-pro", "_blank");
+    });
   }
 
   function showNoKey() {
@@ -369,6 +496,9 @@
     toolbar.innerHTML = "";
     result.classList.add("hidden");
     result.innerHTML = "";
+    // Remove any promo banners
+    const promo = shadow.querySelector(".qw-promo-banner");
+    if (promo) promo.remove();
     host.style.setProperty("pointer-events", "none", "important");
   }
 
@@ -601,6 +731,80 @@
       }
       .qw-upgrade-btn:hover, .qw-settings-link:hover {
         background: #4338ca;
+      }
+
+      /* ── Promo Banner (Share / Review) ── */
+      .qw-promo-banner {
+        position: absolute;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 13px;
+        line-height: 1.4;
+        pointer-events: auto;
+        max-width: 420px;
+        min-width: 280px;
+        background: linear-gradient(135deg, #1e1b3a 0%, #2d2655 50%, #1e1b3a 100%);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.25), 0 0 12px rgba(139, 92, 246, 0.15);
+        animation: qw-fade-in 0.2s ease-out;
+        overflow: hidden;
+      }
+
+      .qw-promo-content {
+        padding: 16px 20px;
+        text-align: center;
+      }
+
+      .qw-promo-text {
+        color: #f0eeff;
+        font-size: 13.5px;
+        margin-bottom: 14px;
+        line-height: 1.5;
+      }
+
+      .qw-promo-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .qw-promo-action {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 20px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        color: #fff;
+        font-size: 12.5px;
+        font-family: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .qw-promo-action:hover {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        box-shadow: 0 2px 10px rgba(124, 58, 237, 0.4);
+      }
+
+      .qw-promo-dismiss {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 16px;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 8px;
+        background: transparent;
+        color: #a5a0c8;
+        font-size: 12.5px;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .qw-promo-dismiss:hover {
+        background: rgba(139, 92, 246, 0.1);
+        color: #d4d0f0;
+        border-color: rgba(139, 92, 246, 0.5);
       }
 
       /* ── Animations ── */

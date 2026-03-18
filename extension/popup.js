@@ -116,7 +116,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("upgrade-link").addEventListener("click", (e) => {
     e.preventDefault();
-    // Opens your Stripe payment page
-    chrome.tabs.create({ url: "https://snapwrite.ai/pricing" });
+    chrome.tabs.create({ url: "https://safaraji.gumroad.com/l/snapwrite-pro" });
   });
 });

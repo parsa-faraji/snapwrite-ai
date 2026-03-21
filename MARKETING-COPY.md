@@ -11,25 +11,23 @@ SnapWrite AI — AI Writing Assistant
 Select any text to improve, rewrite, reply, summarize, fix grammar, or translate. AI writing assistant for every website.
 
 ### Full Description
-SnapWrite AI is a free AI writing assistant that works on every website.
+SnapWrite AI is a free AI-powered writing assistant that works on every website.
 
-Select any text and a floating toolbar appears with 6 powerful AI actions:
+Select any text and instantly access 6 powerful AI actions:
 
-- Improve: Make your writing clearer, more engaging, and polished
-- Reply: Generate smart, contextual responses to any message
-- Rewrite: Change tone — professional, casual, shorter, or longer
-- Summarize: Condense long text into 2-3 clear sentences
-- Fix Grammar: Catch spelling, grammar, and punctuation errors
-- Translate: Convert between 9 languages instantly
+• Improve — Make your writing clearer, more engaging, and polished
+• Reply — Generate smart, contextual responses to messages and emails
+• Rewrite — Professional, casual, shorter, or longer versions
+• Summarize — Get key points in 2-3 sentences
+• Fix Grammar — Correct spelling, grammar, and punctuation
+• Translate — Instantly translate to 9+ languages
 
-Also available via right-click menu and keyboard shortcut (Alt+Q).
+Works everywhere you write — on any website, in any text field across the web.
 
-Works on Gmail, LinkedIn, Twitter/X, Slack, Google Docs, Reddit, and every other website you use.
+No setup required — just install and start writing better. Free users get 5 AI actions per day. Upgrade to Pro for unlimited usage.
 
-Free plan: 5 AI actions per day (7-day unlimited trial)
-Pro plan: Unlimited actions for $9.99/month
-
-No signup required. Install and start writing better in seconds.
+Keyboard shortcut: Alt+Q to activate on selected text.
+Right-click context menu included for quick access.
 
 ### Category
 Productivity

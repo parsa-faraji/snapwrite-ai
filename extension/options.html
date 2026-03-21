@@ -24,6 +24,25 @@
         <span id="status-text">API key not set — add one below to get started</span>
       </div>
 
+      <!-- License Key -->
+      <div class="card">
+        <h2>Pro License</h2>
+        <p class="hint">Enter your license key to unlock unlimited AI actions.</p>
+
+        <div class="input-group">
+          <input type="text" id="license-key" placeholder="SW-XXXX-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="text-transform:uppercase;letter-spacing:1px;">
+        </div>
+
+        <button class="save-btn secondary" id="activate-btn">Activate License</button>
+
+        <div class="license-status hidden" id="license-status"></div>
+
+        <p class="note">
+          Don't have a key? <a href="https://snapwrite.io/#pricing" target="_blank">Get SnapWrite Pro</a>
+          <span id="manage-sub" class="hidden"> · <a href="#" id="manage-sub-link">Manage subscription</a></span>
+        </p>
+      </div>
+
       <!-- Provider -->
       <div class="card">
         <h2>AI Provider</h2>

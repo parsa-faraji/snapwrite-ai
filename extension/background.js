@@ -54,8 +54,8 @@ async function incrementUsage() {
 }
 
 async function isPro() {
-  const data = await chrome.storage.sync.get(["pro", "installedAt"]);
-  if (data.pro === true) return true;
+  const data = await chrome.storage.sync.get(["pro", "installedAt", "licenseKey"]);
+  if (data.pro === true && data.licenseKey) return true;
 
   // Free trial: unlimited for first 7 days
   if (data.installedAt) {
@@ -66,6 +66,34 @@ async function isPro() {
   }
 
   return false;
+}
+
+async function revalidateLicense() {
+  const data = await chrome.storage.sync.get(["licenseKey", "lastValidated"]);
+  if (!data.licenseKey) return;
+
+  const lastValidated = data.lastValidated ? new Date(data.lastValidated) : null;
+  const now = new Date();
+
+  // Re-validate every 24 hours
+  if (lastValidated && (now - lastValidated) < 24 * 60 * 60 * 1000) return;
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/validate-license`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ licenseKey: data.licenseKey }),
+    });
+    const result = await res.json();
+
+    if (result.valid) {
+      await chrome.storage.sync.set({ pro: true, lastValidated: now.toISOString() });
+    } else {
+      await chrome.storage.sync.set({ pro: false, lastValidated: now.toISOString() });
+    }
+  } catch {
+    // Network error — keep current state
+  }
 }
 
 async function getTrialDaysLeft() {
@@ -205,6 +233,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   }
 
   if (request.type === "GET_USAGE") {
+    revalidateLicense();
     Promise.all([getUsageToday(), isPro(), getTrialDaysLeft()]).then(
       ([usage, pro, trialDays]) => {
         sendResponse({ usage, limit: FREE_DAILY_LIMIT, pro, trialDays });

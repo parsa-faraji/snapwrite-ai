@@ -116,6 +116,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("upgrade-link").addEventListener("click", (e) => {
     e.preventDefault();
-    chrome.tabs.create({ url: "https://safaraji.gumroad.com/l/snapwrite-pro" });
+    chrome.tabs.create({ url: "https://snapwrite.io/#pricing" });
   });
 });

@@ -231,6 +231,36 @@ body {
   border-color: #4f46e5;
 }
 
+/* ── License Key ── */
+.save-btn.secondary {
+  background: #fff;
+  color: #4f46e5;
+  border: 1.5px solid #4f46e5;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.save-btn.secondary:hover {
+  background: #f5f3ff;
+}
+
+.license-status {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+.license-status.success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+}
+.license-status.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
 /* ── Save ── */
 .save-btn {
   width: 100%;

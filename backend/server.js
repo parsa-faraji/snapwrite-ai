@@ -1,5 +1,7 @@
 import { createServer } from "node:http";
+import crypto from "node:crypto";
 import OpenAI from "openai";
+import Stripe from "stripe";
 
 // ── Config ──────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3001;
@@ -8,6 +10,8 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const AI_PROVIDER = process.env.AI_PROVIDER || "openai"; // "openai" or "anthropic"
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "*").split(",");
 const RATE_LIMIT_PER_IP = 30; // requests per hour per IP
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 if (!OPENAI_API_KEY && !ANTHROPIC_API_KEY) {
   console.error("Either OPENAI_API_KEY or ANTHROPIC_API_KEY environment variable is required");
@@ -15,6 +19,7 @@ if (!OPENAI_API_KEY && !ANTHROPIC_API_KEY) {
 }
 
 const openai = OPENAI_API_KEY ? new OpenAI({ apiKey: OPENAI_API_KEY }) : null;
+const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
 
 // ── Rate limiter (in-memory, resets hourly) ─────────────────────────
 const rateLimits = new Map();
@@ -119,17 +124,95 @@ async function callAI(prompt, provider) {
   throw new Error("No AI provider configured");
 }
 
+// ── License Key Generator ───────────────────────────────────────────
+function generateLicenseKey() {
+  const bytes = crypto.randomBytes(16);
+  const hex = bytes.toString("hex").toUpperCase();
+  return `SW-${hex.slice(0, 4)}-${hex.slice(4, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}`;
+}
+
 // ── HTTP Server ─────────────────────────────────────────────────────
 const server = createServer(async (req, res) => {
-  // CORS — allow chrome-extension:// origins and configured origins
+  const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+  const pathname = parsedUrl.pathname;
+
+  // ── Stripe Webhook (no CORS, raw body) ────────────────────────────
+  if (req.method === "POST" && pathname === "/api/stripe-webhook") {
+    if (!stripe || !STRIPE_WEBHOOK_SECRET) {
+      res.writeHead(503, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Stripe not configured" }));
+    }
+
+    try {
+      const rawBody = await readRawBody(req);
+      const sig = req.headers["stripe-signature"];
+      const event = stripe.webhooks.constructEvent(rawBody, sig, STRIPE_WEBHOOK_SECRET);
+
+      if (event.type === "checkout.session.completed") {
+        const session = event.data.object;
+        const customerId = session.customer;
+        const licenseKey = generateLicenseKey();
+
+        await stripe.customers.update(customerId, {
+          metadata: { license_key: licenseKey, license_status: "active" },
+        });
+
+        console.log(`License generated: ${licenseKey} for customer ${customerId}`);
+      }
+
+      if (event.type === "customer.subscription.deleted") {
+        const subscription = event.data.object;
+        const customerId = subscription.customer;
+
+        await stripe.customers.update(customerId, {
+          metadata: { license_status: "cancelled" },
+        });
+
+        console.log(`Subscription cancelled for customer ${customerId}`);
+      }
+
+      if (event.type === "customer.subscription.updated") {
+        const subscription = event.data.object;
+        const customerId = subscription.customer;
+        const status = subscription.status === "active" ? "active" : subscription.status;
+
+        await stripe.customers.update(customerId, {
+          metadata: { license_status: status },
+        });
+
+        console.log(`Subscription updated to ${status} for customer ${customerId}`);
+      }
+
+      if (event.type === "invoice.payment_failed") {
+        const invoice = event.data.object;
+        const customerId = invoice.customer;
+
+        await stripe.customers.update(customerId, {
+          metadata: { license_status: "past_due" },
+        });
+
+        console.log(`Payment failed for customer ${customerId}`);
+      }
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ received: true }));
+    } catch (err) {
+      console.error("Stripe webhook error:", err.message);
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: err.message }));
+    }
+  }
+
+  // ── CORS — allow chrome-extension:// origins and configured origins
   const origin = req.headers.origin || "*";
   const isChromeExtension = origin.startsWith("chrome-extension://");
+  const isSnapwriteSite = origin === "https://snapwrite.io";
   const allowOrigin =
-    ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin) || isChromeExtension
+    ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin) || isChromeExtension || isSnapwriteSite
       ? origin
       : "";
   res.setHeader("Access-Control-Allow-Origin", allowOrigin);
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
@@ -138,13 +221,13 @@ const server = createServer(async (req, res) => {
   }
 
   // Health check
-  if (req.method === "GET" && req.url === "/") {
+  if (req.method === "GET" && pathname === "/") {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(JSON.stringify({ status: "ok", service: "snapwrite-api", provider: AI_PROVIDER }));
   }
 
   // Waitlist endpoint
-  if (req.method === "POST" && req.url === "/api/waitlist") {
+  if (req.method === "POST" && pathname === "/api/waitlist") {
     try {
       const body = await readBody(req);
       const { email } = JSON.parse(body);
@@ -165,7 +248,7 @@ const server = createServer(async (req, res) => {
   }
 
   // Main endpoint
-  if (req.method === "POST" && req.url === "/api/generate") {
+  if (req.method === "POST" && pathname === "/api/generate") {
     const ip =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
       req.socket.remoteAddress;
@@ -199,6 +282,87 @@ const server = createServer(async (req, res) => {
     }
   }
 
+  // ── Validate License ──────────────────────────────────────────────
+  if (req.method === "POST" && pathname === "/api/validate-license") {
+    if (!stripe) {
+      res.writeHead(503, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Stripe not configured" }));
+    }
+
+    try {
+      const body = await readBody(req);
+      const { licenseKey } = JSON.parse(body);
+
+      if (!licenseKey) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "licenseKey required" }));
+      }
+
+      const result = await stripe.customers.search({
+        query: `metadata["license_key"]:"${licenseKey}"`,
+      });
+
+      if (result.data.length === 0) {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ valid: false, status: "not_found" }));
+      }
+
+      const customer = result.data[0];
+      const status = customer.metadata.license_status || "unknown";
+
+      if (status === "active") {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ valid: true, status: "active" }));
+      }
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ valid: false, status }));
+    } catch (err) {
+      console.error("License validation error:", err.message);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Validation failed" }));
+    }
+  }
+
+  // ── Stripe Billing Portal ─────────────────────────────────────────
+  if (req.method === "GET" && pathname === "/api/stripe-portal") {
+    if (!stripe) {
+      res.writeHead(503, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Stripe not configured" }));
+    }
+
+    try {
+      const licenseKey = parsedUrl.searchParams.get("license_key");
+
+      if (!licenseKey) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "license_key query param required" }));
+      }
+
+      const result = await stripe.customers.search({
+        query: `metadata["license_key"]:"${licenseKey}"`,
+      });
+
+      if (result.data.length === 0) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "Customer not found" }));
+      }
+
+      const customer = result.data[0];
+      const portalSession = await stripe.billingPortal.sessions.create({
+        customer: customer.id,
+        return_url: "https://snapwrite.io",
+      });
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ url: portalSession.url }));
+    } catch (err) {
+      console.error("Stripe portal error:", err.message);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Failed to create portal session" }));
+    }
+  }
+
   res.writeHead(404, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ error: "Not found" }));
 });
@@ -208,6 +372,15 @@ function readBody(req) {
     const chunks = [];
     req.on("data", (c) => chunks.push(c));
     req.on("end", () => resolve(Buffer.concat(chunks).toString()));
+    req.on("error", reject);
+  });
+}
+
+function readRawBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on("data", (c) => chunks.push(c));
+    req.on("end", () => resolve(Buffer.concat(chunks)));
     req.on("error", reject);
   });
 }

@@ -3,698 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SnapWrite AI — Your AI Writing Assistant, Everywhere on the Web</title>
+  <title>SnapWrite AI — AI Writing Assistant for Every Website</title>
   <meta name="description" content="Select any text on any website to instantly improve, rewrite, reply, summarize, fix grammar, or translate. Free Chrome extension powered by AI.">
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      color: #1a1a2e;
-      background: #fff;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { text-decoration: none; color: inherit; }
-    button { font-family: inherit; cursor: pointer; }
 
-    /* ── Container ── */
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  <!-- Open Graph -->
+  <meta property="og:title" content="SnapWrite AI — AI Writing Assistant for Every Website">
+  <meta property="og:description" content="Select any text on any website to instantly improve, rewrite, reply, summarize, fix grammar, or translate with AI.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://snapwrite.io">
+  <meta property="og:image" content="https://snapwrite.io/assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-    /* ── Nav (sticky) ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      z-index: 100;
-      padding: 12px 0;
-    }
-    nav .wrap { display: flex; align-items: center; justify-content: space-between; }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      font-weight: 700; font-size: 17px;
-    }
-    .nav-logo-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-weight: 700; font-size: 16px;
-    }
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a { font-size: 14px; color: #6b7280; transition: color 0.15s; }
-    .nav-links a:hover { color: #4f46e5; }
-    .nav-cta {
-      padding: 9px 22px;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: #fff !important;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 13.5px;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 2px 8px rgba(79,70,229,0.25);
-    }
-    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(79,70,229,0.35); }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    /* ── Hero ── */
-    .hero {
-      padding: 130px 0 60px;
-      text-align: center;
-      background: linear-gradient(180deg, #fafaff 0%, #fff 100%);
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 16px;
-      background: #f0f1ff;
-      color: #4f46e5;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      border: 1px solid rgba(79,70,229,0.1);
-    }
-    .hero-badge svg { flex-shrink: 0; }
-    .hero h1 {
-      font-size: clamp(32px, 5vw, 54px);
-      font-weight: 800;
-      line-height: 1.12;
-      letter-spacing: -0.025em;
-      margin-bottom: 20px;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .hero h1 .gradient {
-      background: linear-gradient(135deg, #4f46e5, #7c3aed, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-sub {
-      font-size: 18px;
-      color: #6b7280;
-      max-width: 540px;
-      margin: 0 auto 32px;
-      line-height: 1.7;
-    }
-    .hero-cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 16px 36px;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: #fff;
-      border: none;
-      border-radius: 14px;
-      font-size: 17px;
-      font-weight: 600;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 4px 20px rgba(79,70,229,0.35);
-      cursor: pointer;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,70,229,0.45); }
-    .btn-primary svg { flex-shrink: 0; }
-    .hero-meta {
-      display: flex; align-items: center; gap: 20px; flex-wrap: wrap; justify-content: center;
-      margin-top: 4px;
-    }
-    .hero-meta-item {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 13px; color: #6b7280;
-    }
-    .hero-meta-item svg { flex-shrink: 0; }
-    .hero-social-proof {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 18px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 50px;
-      font-size: 13px; color: #374151; font-weight: 500;
-      margin-top: 20px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-    }
-    .stars { color: #f59e0b; font-size: 14px; letter-spacing: 1px; }
-
-    /* ── Works-On Logo Bar ── */
-    .works-on {
-      padding: 50px 0 10px;
-      text-align: center;
-      background: #fff;
-    }
-    .works-on-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #9ca3af;
-      font-weight: 600;
-      margin-bottom: 24px;
-    }
-    .works-on-logos {
-      display: flex; align-items: center; justify-content: center;
-      gap: 36px; flex-wrap: wrap;
-    }
-    .works-on-item {
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      color: #9ca3af;
-      font-size: 11.5px; font-weight: 500;
-      transition: color 0.2s;
-    }
-    .works-on-item:hover { color: #6b7280; }
-    .works-on-icon {
-      width: 44px; height: 44px;
-      border-radius: 12px;
-      background: #f8f9fb;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      border: 1px solid #f0f0f0;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .works-on-item:hover .works-on-icon {
-      border-color: #e0e0ff;
-      box-shadow: 0 2px 8px rgba(79,70,229,0.06);
-    }
-
-    /* ── Animated Before/After Demo ── */
-    .demo-section {
-      padding: 80px 0;
-      background: #f8f9fb;
-    }
-    .demo-section .section-title { text-align: center; margin-bottom: 48px; }
-    .demo-section .section-title h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-    .demo-section .section-title p { color: #6b7280; font-size: 16px; }
-    .demo-container {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 24px;
-      align-items: stretch;
-      max-width: 860px;
-      margin: 0 auto;
-    }
-    .demo-panel {
-      background: #fff;
-      border-radius: 16px;
-      border: 1px solid #e5e7eb;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-    }
-    .demo-panel-header {
-      padding: 14px 20px;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .demo-panel-header.before { color: #ef4444; }
-    .demo-panel-header.after { color: #10b981; }
-    .demo-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-    }
-    .demo-dot.red { background: #ef4444; }
-    .demo-dot.green { background: #10b981; }
-    .demo-panel-body {
-      padding: 24px 20px;
-      font-size: 14.5px;
-      line-height: 1.75;
-      color: #374151;
-      min-height: 180px;
-      position: relative;
-    }
-    .demo-panel-body .error-text {
-      text-decoration: underline wavy #ef4444;
-      text-underline-offset: 3px;
-    }
-    .demo-arrow {
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
-      color: #c7d0ff;
-      align-self: center;
-    }
-
-    /* Demo animation: highlight sweep */
-    .demo-panel.before .demo-panel-body {
-      position: relative;
-    }
-    .demo-highlight {
-      position: relative;
-    }
-    .demo-highlight::after {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 0%;
-      background: rgba(79,70,229,0.12);
-      border-radius: 3px;
-      animation: highlightSweep 4s ease-in-out infinite;
-    }
-    @keyframes highlightSweep {
-      0%, 100% { width: 0%; opacity: 0; }
-      15% { width: 100%; opacity: 1; }
-      50% { width: 100%; opacity: 1; }
-      65% { width: 100%; opacity: 0; }
-    }
-
-    /* After panel: typing reveal */
-    .demo-panel.after .demo-panel-body .typed-text {
-      overflow: hidden;
-      border-right: 2px solid #4f46e5;
-      animation: typing 3s steps(60) 1s forwards, blinkCaret 0.6s step-end infinite;
-      white-space: normal;
-      max-height: 0;
-    }
-    @keyframes revealText {
-      0% { max-height: 0; opacity: 0; }
-      10% { max-height: 0; opacity: 0; }
-      30% { max-height: 200px; opacity: 1; }
-      100% { max-height: 200px; opacity: 1; }
-    }
-    .after-reveal {
-      animation: revealText 4s ease-in-out infinite;
-      overflow: hidden;
-    }
-    @keyframes blinkCaret {
-      50% { border-color: transparent; }
-    }
-
-    /* SnapWrite popup animation */
-    .demo-popup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(79,70,229,0.18);
-      border: 1px solid #e0e0ff;
-      padding: 10px;
-      display: flex; gap: 6px; flex-wrap: wrap;
-      max-width: 220px;
-      opacity: 0;
-      animation: popupAppear 4s ease-in-out infinite;
-      z-index: 2;
-    }
-    @keyframes popupAppear {
-      0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-      20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      45% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      55% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    }
-    .demo-popup-btn {
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      background: #f0f1ff;
-      color: #4f46e5;
-      border: 1px solid rgba(79,70,229,0.15);
-      white-space: nowrap;
-    }
-    .demo-popup-btn.active {
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: #fff;
-      border-color: transparent;
-      animation: btnPulse 4s ease-in-out infinite;
-    }
-    @keyframes btnPulse {
-      0%, 100% { box-shadow: none; }
-      30% { box-shadow: 0 0 0 3px rgba(79,70,229,0.2); }
-      45% { box-shadow: none; }
-    }
-
-    /* ── Stats Bar ── */
-    .stats-bar {
-      padding: 48px 0;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: #fff;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      text-align: center;
-    }
-    .stat-item h3 {
-      font-size: clamp(22px, 3vw, 32px);
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .stat-item p {
-      font-size: 13.5px;
-      opacity: 0.85;
-      font-weight: 400;
-    }
-
-    /* ── Features ── */
-    .features {
-      padding: 80px 0;
-      background: #fff;
-    }
-    .section-title { text-align: center; margin-bottom: 48px; }
-    .section-title h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-    .section-title p { color: #6b7280; font-size: 16px; }
-    .section-title .section-tag {
-      display: inline-block;
-      padding: 4px 12px;
-      background: #f0f1ff;
-      color: #4f46e5;
-      border-radius: 50px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    .feature-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 28px;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-    }
-    .feature-card:hover {
-      border-color: #c7d0ff;
-      box-shadow: 0 8px 24px rgba(79,70,229,0.08);
-      transform: translateY(-2px);
-    }
-    .feature-icon {
-      width: 46px; height: 46px;
-      background: linear-gradient(135deg, #f0f1ff, #ede9fe);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      margin-bottom: 16px;
-    }
-    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-    .feature-card p { font-size: 14px; color: #6b7280; line-height: 1.65; }
-
-    /* ── How It Works ── */
-    .how {
-      padding: 80px 0;
-      background: #f8f9fb;
-    }
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 40px;
-      text-align: center;
-      max-width: 860px;
-      margin: 0 auto;
-    }
-    .step-visual {
-      width: 64px; height: 64px;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: #fff;
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
-      margin: 0 auto 18px;
-      box-shadow: 0 4px 16px rgba(79,70,229,0.2);
-    }
-    .step-num-label {
-      display: inline-block;
-      padding: 3px 10px;
-      background: #f0f1ff;
-      color: #4f46e5;
-      border-radius: 50px;
-      font-size: 11px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .steps h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-    .steps p { font-size: 14px; color: #6b7280; line-height: 1.6; }
-
-    /* ── Testimonials ── */
-    .testimonials {
-      padding: 80px 0;
-      background: #fff;
-    }
-    .testimonial-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .testimonial-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 28px;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .testimonial-card:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-      transform: translateY(-2px);
-    }
-    .testimonial-stars {
-      color: #f59e0b;
-      font-size: 15px;
-      letter-spacing: 2px;
-      margin-bottom: 14px;
-    }
-    .testimonial-text {
-      font-size: 14.5px;
-      line-height: 1.7;
-      color: #374151;
-      margin-bottom: 20px;
-      font-style: italic;
-    }
-    .testimonial-author {
-      display: flex; align-items: center; gap: 12px;
-    }
-    .testimonial-avatar {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-weight: 700; font-size: 15px;
-    }
-    .testimonial-name { font-size: 14px; font-weight: 600; }
-    .testimonial-role { font-size: 12.5px; color: #9ca3af; }
-
-    /* ── Pricing ── */
-    .pricing {
-      padding: 80px 0;
-      background: #f8f9fb;
-    }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    .price-card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 36px 32px;
-    }
-    .price-card.featured {
-      border-color: #4f46e5;
-      box-shadow: 0 4px 28px rgba(79,70,229,0.14);
-      position: relative;
-    }
-    .price-card.featured::before {
-      content: 'Most Popular';
-      position: absolute;
-      top: -13px; left: 50%; transform: translateX(-50%);
-      padding: 5px 18px;
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: #fff;
-      border-radius: 50px;
-      font-size: 11.5px;
-      font-weight: 600;
-    }
-    .price-card-header { text-align: center; margin-bottom: 24px; }
-    .price-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-    .price-amount { font-size: 42px; font-weight: 800; margin: 8px 0 4px; }
-    .price-amount span { font-size: 15px; font-weight: 400; color: #9ca3af; }
-    .price-desc { color: #6b7280; font-size: 13px; }
-    .price-limit {
-      display: inline-block;
-      padding: 4px 12px;
-      background: #fef3c7;
-      color: #92400e;
-      border-radius: 6px;
-      font-size: 11.5px;
-      font-weight: 600;
-      margin-top: 8px;
-    }
-    .price-features { list-style: none; margin-bottom: 28px; }
-    .price-features li {
-      padding: 8px 0;
-      font-size: 14px;
-      color: #374151;
-      display: flex; align-items: center; gap: 10px;
-      border-bottom: 1px solid #f8f9fb;
-    }
-    .price-features li:last-child { border-bottom: none; }
-    .price-features li::before {
-      content: '';
-      width: 18px; height: 18px; flex-shrink: 0;
-      background: #f0f1ff;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='none' viewBox='0 0 10 10'%3E%3Cpath stroke='%234f46e5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M2 5.5L4 7.5L8 3'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    .price-btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      border: none;
-      transition: all 0.15s;
-      text-align: center;
-      cursor: pointer;
-    }
-    .price-btn.primary {
-      background: linear-gradient(135deg, #4f46e5, #7c3aed);
-      color: #fff;
-      box-shadow: 0 2px 12px rgba(79,70,229,0.25);
-    }
-    .price-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(79,70,229,0.35); }
-    .price-btn.outline {
-      background: #fff;
-      color: #374151;
-      border: 1.5px solid #e5e7eb;
-    }
-    .price-btn.outline:hover { border-color: #c7d0ff; background: #fafaff; }
-
-    /* ── FAQ Accordion (pure CSS) ── */
-    .faq {
-      padding: 80px 0;
-      background: #fff;
-    }
-    .faq-list {
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    .faq-item {
-      border-bottom: 1px solid #f0f0f0;
-    }
-    .faq-item:first-child { border-top: 1px solid #f0f0f0; }
-    .faq-toggle {
-      display: none;
-    }
-    .faq-question {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 0;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a1a2e;
-      transition: color 0.15s;
-      user-select: none;
-    }
-    .faq-question:hover { color: #4f46e5; }
-    .faq-icon {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      background: #f0f1ff;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-      color: #4f46e5;
-      transition: transform 0.25s, background 0.25s;
-      flex-shrink: 0;
-    }
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease;
-    }
-    .faq-answer-inner {
-      padding: 0 0 20px;
-      font-size: 14.5px;
-      line-height: 1.7;
-      color: #6b7280;
-    }
-    .faq-toggle:checked ~ .faq-question .faq-icon {
-      transform: rotate(45deg);
-      background: #4f46e5;
-      color: #fff;
-    }
-    .faq-toggle:checked ~ .faq-question { color: #4f46e5; }
-    .faq-toggle:checked ~ .faq-answer {
-      max-height: 200px;
-    }
-
-    /* ── Final CTA ── */
-    .cta {
-      padding: 90px 0;
-      text-align: center;
-      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
-      color: #fff;
-    }
-    .cta h2 {
-      font-size: clamp(26px, 4vw, 36px);
-      font-weight: 800;
-      margin-bottom: 14px;
-    }
-    .cta p {
-      color: rgba(255,255,255,0.7);
-      font-size: 17px;
-      margin-bottom: 32px;
-      max-width: 500px;
-      margin-left: auto; margin-right: auto;
-    }
-    .cta .btn-primary {
-      background: #fff;
-      color: #4f46e5;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    .cta .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    }
-    .cta-meta {
-      margin-top: 18px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-    }
-
-    /* ── Footer ── */
-    footer {
-      padding: 36px 0;
-      border-top: 1px solid #f0f0f0;
-      text-align: center;
-      color: #9ca3af;
-      font-size: 13px;
-    }
-    footer a { color: #9ca3af; text-decoration: underline; }
-    footer a:hover { color: #6b7280; }
-
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
-      .feature-grid { grid-template-columns: repeat(2, 1fr); }
-      .testimonial-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
-      .demo-container { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
-      .demo-arrow { transform: rotate(90deg); padding: 8px 0; }
-      .steps { grid-template-columns: 1fr; max-width: 400px; }
-    }
-    @media (max-width: 640px) {
-      .hero { padding: 110px 0 50px; }
-      .feature-grid { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; max-width: 380px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-      .nav-links a:not(.nav-cta) { display: none; }
-      .works-on-logos { gap: 20px; }
-      .hero-meta { gap: 12px; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -710,56 +35,79 @@
         <a href="#how">How It Works</a>
         <a href="#pricing">Pricing</a>
         <a href="#faq">FAQ</a>
-        <a href="#install" class="nav-cta">Add to Chrome &mdash; Free</a>
+        <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="nav-cta">Add to Chrome &mdash; Free</a>
       </div>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg">Add to Chrome &mdash; Free</a>
+  </div>
 
   <!-- ─── Hero ─── -->
   <section class="hero">
     <div class="wrap">
-      <div class="hero-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-        AI Writing Assistant for Chrome
-      </div>
-      <h1>
-        Stop Struggling with Words.<br>
-        <span class="gradient">Let AI Write It Better.</span>
-      </h1>
-      <p class="hero-sub">
-        Select any text on any website and instantly improve, rewrite, reply,
-        summarize, fix grammar, or translate it. One click. Done.
-      </p>
-      <div class="hero-cta-wrap">
-        <a href="#install" class="btn-primary">
-          <!-- Chrome SVG icon -->
-          <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#fff"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#fff"/></svg>
-          Add to Chrome &mdash; It's Free
-        </a>
+      <div class="hero-content anim">
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          AI Writing Assistant for Chrome
+        </div>
+        <h1>
+          Write better,<br>
+          <span class="gradient">everywhere on the web.</span>
+        </h1>
+        <p class="hero-sub">
+          Select any text on any website. Instantly improve, rewrite, reply,
+          summarize, fix grammar, or translate it with AI. One click.
+        </p>
+        <div class="hero-cta-group">
+          <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="btn-primary">
+            <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#fff"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#fff"/></svg>
+            Add to Chrome &mdash; Free
+          </a>
+          <a href="#demo" class="btn-secondary">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#4f46e5" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Watch Demo
+          </a>
+        </div>
         <div class="hero-meta">
           <span class="hero-meta-item">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             Installs in 10 seconds
           </span>
           <span class="hero-meta-item">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             No signup required
           </span>
           <span class="hero-meta-item">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             Free forever
           </span>
         </div>
-        <div class="hero-social-proof">
-          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-          Built for writers &amp; professionals
+      </div>
+      <div class="hero-visual anim">
+        <!-- Product screenshot — replace with real screenshot from Playwright -->
+        <img src="assets/hero-screenshot.png" alt="SnapWrite AI toolbar appearing over selected text on a webpage" class="hero-screenshot"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <!-- Fallback if screenshot doesn't exist yet -->
+        <div style="display:none; width:100%; max-width:520px; aspect-ratio:4/3; background:linear-gradient(135deg,#ede9fe,#e0e7ff); border-radius:16px; align-items:center; justify-content:center; flex-direction:column; gap:12px; box-shadow:0 20px 60px rgba(0,0,0,0.08);">
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#4f46e5" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <span style="color:#4f46e5; font-size:14px; font-weight:600;">Product screenshot coming soon</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── Works-On Logo Bar ─── -->
-  <section class="works-on">
+  <!-- ─── Works On ─── -->
+  <section class="works-on anim">
     <div class="wrap">
       <div class="works-on-label">Works everywhere you write</div>
       <div class="works-on-logos">
@@ -803,56 +151,89 @@
     </div>
   </section>
 
-  <!-- ─── Animated Before/After Demo ─── -->
+  <!-- ─── Interactive Demo ─── -->
   <section class="demo-section" id="demo">
     <div class="wrap">
-      <div class="section-title">
-        <span class="section-tag">See it in action</span>
+      <div class="section-title center anim">
+        <span class="section-tag">See It In Action</span>
         <h2>From rough draft to polished writing in one click</h2>
-        <p>Select messy text, pick an action, and watch SnapWrite transform it instantly.</p>
+        <p>Watch how SnapWrite transforms your writing instantly, right where you type.</p>
       </div>
-      <div class="demo-container">
-        <!-- Before -->
-        <div class="demo-panel before">
-          <div class="demo-panel-header before">
-            <span class="demo-dot red"></span>
-            Before
-          </div>
-          <div class="demo-panel-body">
-            <div class="demo-highlight">
-              hey mike, wanted to <span class="error-text">follw</span> up on the thing we <span class="error-text">talk</span> about last week. i think we should <span class="error-text">definately</span> move forward with the project <span class="error-text">becuase</span> its going to be really good for the team and <span class="error-text">eveyone</span> will benefit from it.
-            </div>
-            <!-- Animated popup -->
-            <div class="demo-popup">
-              <span class="demo-popup-btn active">Improve</span>
-              <span class="demo-popup-btn">Reply</span>
-              <span class="demo-popup-btn">Rewrite</span>
-              <span class="demo-popup-btn">Summarize</span>
-              <span class="demo-popup-btn">Fix</span>
-              <span class="demo-popup-btn">Translate</span>
-            </div>
-          </div>
+
+      <div class="demo-browser anim" id="demo-interactive">
+        <div class="demo-browser-bar">
+          <span class="demo-browser-dot"></span>
+          <span class="demo-browser-dot"></span>
+          <span class="demo-browser-dot"></span>
+          <span class="demo-browser-url">compose.email.com/new</span>
         </div>
-        <!-- Arrow -->
-        <div class="demo-arrow">&#10132;</div>
-        <!-- After -->
-        <div class="demo-panel after">
-          <div class="demo-panel-header after">
-            <span class="demo-dot green"></span>
-            After
+        <div class="demo-content">
+          <!-- Step 1: Raw text -->
+          <div class="demo-step active">
+            <h3>Step 1 &mdash; You write a rough draft</h3>
+            <p class="demo-text">
+              hey mike, wanted to <span class="error">follw</span> up on the thing we
+              <span class="error">talk</span> about last week. i think we should
+              <span class="error">definately</span> move forward with the project
+              <span class="error">becuase</span> its going to be really good for the team
+              and <span class="error">eveyone</span> will benefit from it.
+            </p>
           </div>
-          <div class="demo-panel-body">
-            <div class="after-reveal">
+
+          <!-- Step 2: Select + toolbar -->
+          <div class="demo-step">
+            <h3>Step 2 &mdash; Select the text</h3>
+            <p class="demo-text">
+              <span class="highlight">hey mike, wanted to follw up on the thing we talk about last week. i think we should definately move forward with the project becuase its going to be really good for the team and eveyone will benefit from it.</span>
+            </p>
+            <div class="demo-toolbar">
+              <button class="demo-toolbar-btn active">Improve</button>
+              <button class="demo-toolbar-btn">Reply</button>
+              <button class="demo-toolbar-btn">Rewrite</button>
+              <button class="demo-toolbar-btn">Summarize</button>
+              <button class="demo-toolbar-btn">Fix</button>
+              <button class="demo-toolbar-btn">Translate</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Result -->
+          <div class="demo-step">
+            <h3>Step 3 &mdash; Polished in one click</h3>
+            <div class="demo-result">
               Hi Mike, I wanted to follow up on our conversation from last week. I believe we should move forward with the project &mdash; it will have a meaningful impact on the team, and everyone stands to benefit from it. Let me know when you're available to discuss the next steps.
             </div>
           </div>
+        </div>
+
+        <div class="demo-dots">
+          <button class="demo-dot active" aria-label="Step 1"></button>
+          <button class="demo-dot" aria-label="Step 2"></button>
+          <button class="demo-dot" aria-label="Step 3"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Video Demo ─── -->
+  <section class="video-section" id="video">
+    <div class="wrap">
+      <div class="section-title center anim">
+        <span class="section-tag">Demo Video</span>
+        <h2>See SnapWrite in the real world</h2>
+        <p>Watch a 30-second walkthrough of the extension on a real website.</p>
+      </div>
+      <div class="video-container anim">
+        <!-- Replace with <video src="assets/demo.mp4" autoplay muted loop playsinline> when ready -->
+        <div class="video-placeholder">
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#64748b" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <p>Demo video coming soon</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ─── Stats Bar ─── -->
-  <section class="stats-bar">
+  <section class="stats-bar anim">
     <div class="wrap">
       <div class="stats-grid">
         <div class="stat-item">
@@ -878,38 +259,38 @@
   <!-- ─── Features ─── -->
   <section class="features" id="features">
     <div class="wrap">
-      <div class="section-title">
+      <div class="section-title center anim">
         <span class="section-tag">Features</span>
         <h2>Six powerful AI actions at your fingertips</h2>
         <p>One extension. One click. Six ways to write better.</p>
       </div>
       <div class="feature-grid">
-        <div class="feature-card">
+        <div class="feature-card anim">
           <div class="feature-icon">&#10024;</div>
           <h3>Improve</h3>
           <p>Make any text clearer, more engaging, and polished. Perfect for emails, posts, and important messages.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card anim">
           <div class="feature-icon">&#128172;</div>
           <h3>Smart Reply</h3>
-          <p>Generate contextual replies to any message. Works on email, LinkedIn, Slack, Twitter, and more.</p>
+          <p>Generate contextual replies to any message. Works on email, social media, chat apps, and more.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card anim">
           <div class="feature-icon">&#9999;&#65039;</div>
           <h3>Rewrite</h3>
           <p>Change the tone to professional, casual, shorter, or longer. Adapt your writing for any audience.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card anim">
           <div class="feature-icon">&#128203;</div>
           <h3>Summarize</h3>
           <p>Turn long articles, emails, or docs into concise summaries. Save hours of reading every week.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card anim">
           <div class="feature-icon">&#9989;</div>
           <h3>Fix Grammar</h3>
           <p>Instantly fix spelling, grammar, and punctuation while keeping your voice and meaning intact.</p>
         </div>
-        <div class="feature-card">
+        <div class="feature-card anim">
           <div class="feature-icon">&#127760;</div>
           <h3>Translate</h3>
           <p>Translate text to and from 9+ languages without leaving the page you're on.</p>
@@ -921,87 +302,71 @@
   <!-- ─── How It Works ─── -->
   <section class="how" id="how">
     <div class="wrap">
-      <div class="section-title">
+      <div class="section-title center anim">
         <span class="section-tag">How It Works</span>
         <h2>Start writing better in 10 seconds</h2>
         <p>No account. No setup. No learning curve.</p>
       </div>
-      <div class="steps">
-        <div>
-          <div class="step-visual">
+      <div class="steps anim">
+        <div class="step">
+          <div class="step-num">
             <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
-          <span class="step-num-label">Step 1</span>
+          <span class="step-label">Step 1</span>
           <h3>Install the extension</h3>
-          <p>Add SnapWrite AI to Chrome for free. One click install, no signup needed.</p>
+          <p>Add SnapWrite AI to Chrome. One click, no signup.</p>
         </div>
-        <div>
-          <div class="step-visual">
+        <div class="step">
+          <div class="step-num">
             <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
           </div>
-          <span class="step-num-label">Step 2</span>
+          <span class="step-label">Step 2</span>
           <h3>Select any text</h3>
-          <p>Highlight text on any website. SnapWrite appears instantly with your AI actions.</p>
+          <p>Highlight text on any website. The toolbar appears instantly.</p>
         </div>
-        <div>
-          <div class="step-visual">
+        <div class="step">
+          <div class="step-num">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <span class="step-label">Step 3</span>
+          <h3>Pick an action</h3>
+          <p>Improve, reply, rewrite, summarize, fix, or translate.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">
             <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
           </div>
-          <span class="step-num-label">Step 3</span>
-          <h3>Pick an action &amp; done</h3>
-          <p>Choose improve, reply, rewrite, summarize, fix, or translate. Copy or insert the result.</p>
+          <span class="step-label">Step 4</span>
+          <h3>Done</h3>
+          <p>Copy or insert the result. No tab switching, no copy-paste.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ─── Why SnapWrite ─── -->
-  <section class="testimonials" id="why">
+  <section class="why" id="why">
     <div class="wrap">
-      <div class="section-title">
+      <div class="section-title center anim">
         <span class="section-tag">Why SnapWrite</span>
         <h2>Stop copy-pasting to ChatGPT</h2>
-        <p>SnapWrite brings AI writing assistance directly to every text field on the web.</p>
+        <p>SnapWrite brings AI writing directly to every text field on the web.</p>
       </div>
-      <div class="testimonial-grid">
-        <div class="testimonial-card">
-          <div class="testimonial-stars" style="font-size:24px;">&#128337;</div>
-          <div class="testimonial-text">
-            <strong>Without SnapWrite:</strong> Select text &rarr; copy &rarr; open ChatGPT &rarr; paste &rarr; write prompt &rarr; wait &rarr; copy result &rarr; switch back &rarr; paste. That's 8 steps.
-          </div>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar" style="background:linear-gradient(135deg,#ef4444,#f97316);">&#10005;</div>
-            <div>
-              <div class="testimonial-name">The old way</div>
-              <div class="testimonial-role">Slow &amp; tedious</div>
-            </div>
-          </div>
+      <div class="why-grid">
+        <div class="why-card negative anim">
+          <div class="why-icon">&#128337;</div>
+          <h3>The old way</h3>
+          <p>Select &rarr; copy &rarr; open ChatGPT &rarr; paste &rarr; prompt &rarr; wait &rarr; copy &rarr; switch back &rarr; paste. <strong>8 steps.</strong></p>
         </div>
-        <div class="testimonial-card">
-          <div class="testimonial-stars" style="font-size:24px;">&#9889;</div>
-          <div class="testimonial-text">
-            <strong>With SnapWrite:</strong> Select text &rarr; click an action &rarr; done. Two steps. Results appear right where you're writing. No tab switching, no copy-pasting.
-          </div>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">&#10003;</div>
-            <div>
-              <div class="testimonial-name">The SnapWrite way</div>
-              <div class="testimonial-role">Fast &amp; seamless</div>
-            </div>
-          </div>
+        <div class="why-card positive anim">
+          <div class="why-icon">&#9889;</div>
+          <h3>The SnapWrite way</h3>
+          <p>Select text &rarr; click an action &rarr; done. <strong>2 steps.</strong> Results appear right where you're writing.</p>
         </div>
-        <div class="testimonial-card">
-          <div class="testimonial-stars" style="font-size:24px;">&#128274;</div>
-          <div class="testimonial-text">
-            <strong>Private by design:</strong> Your text is processed by AI and returned directly to you. Nothing is stored, logged, or sold. Your writing stays yours.
-          </div>
-          <div class="testimonial-author">
-            <div class="testimonial-avatar" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">&#128737;</div>
-            <div>
-              <div class="testimonial-name">Your privacy matters</div>
-              <div class="testimonial-role">No data stored</div>
-            </div>
-          </div>
+        <div class="why-card neutral anim">
+          <div class="why-icon">&#128274;</div>
+          <h3>Private by design</h3>
+          <p>Your text is processed and returned directly to you. Nothing is stored, logged, or sold. Your writing stays yours.</p>
         </div>
       </div>
     </div>
@@ -1010,40 +375,57 @@
   <!-- ─── Pricing ─── -->
   <section class="pricing" id="pricing">
     <div class="wrap">
-      <div class="section-title">
+      <div class="section-title center anim">
         <span class="section-tag">Pricing</span>
         <h2>Start free. Upgrade when you need more.</h2>
         <p>No credit card required. No hidden fees.</p>
       </div>
-      <div class="pricing-grid">
+
+      <!-- Toggle -->
+      <div class="pricing-toggle-wrap anim">
+        <span class="pricing-toggle-label active">Monthly</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="pricing-toggle">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="pricing-toggle-label">Annual</span>
+        <span class="pricing-toggle-save">Save 20%</span>
+      </div>
+
+      <div class="pricing-grid anim">
+        <!-- Free -->
         <div class="price-card">
-          <div class="price-card-header">
-            <h3>Free</h3>
-            <div class="price-amount">$0 <span>/ month</span></div>
-            <div class="price-desc">Everything you need to get started</div>
-            <div class="price-limit">Limited to 5 uses per day</div>
-          </div>
+          <h3>Free</h3>
+          <div class="price-amount">$0 <span>/ month</span></div>
+          <div class="price-desc">Everything you need to get started</div>
           <ul class="price-features">
             <li>All 6 AI writing actions</li>
             <li>Works on every website</li>
             <li>9+ languages supported</li>
             <li>No account required</li>
+            <li>5 uses per day</li>
           </ul>
-          <a href="#install" class="price-btn outline">Add to Chrome &mdash; Free</a>
+          <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="price-btn outline">Add to Chrome &mdash; Free</a>
         </div>
+
+        <!-- Pro -->
         <div class="price-card featured">
-          <div class="price-card-header">
-            <h3>Pro</h3>
-            <div class="price-amount">$9.99 <span>/ month</span></div>
-            <div class="price-desc">For professionals who write daily</div>
-          </div>
+          <div class="price-badge">Most Popular</div>
+          <h3>Pro</h3>
+          <div class="price-amount price-monthly">$9.99 <span>/ month</span></div>
+          <div class="price-amount price-annual" style="display:none;">$7.99 <span>/ month</span></div>
+          <div class="price-desc">For professionals who write daily</div>
           <ul class="price-features">
             <li>Unlimited AI actions</li>
             <li>All 6 writing actions</li>
             <li>Priority AI speed</li>
             <li>Email support</li>
+            <li>7-day free trial</li>
           </ul>
-          <a href="https://safaraji.gumroad.com/l/snapwrite-pro" target="_blank" class="price-btn primary">Start 7-Day Free Trial</a>
+          <!-- Replace href with your Stripe Payment Link when ready -->
+          <a href="#" class="price-btn primary link-monthly">Start 7-Day Free Trial</a>
+          <a href="#" class="price-btn primary link-annual" style="display:none;">Start 7-Day Free Trial</a>
+          <a href="#" class="manage-link">Already a subscriber? Manage your plan</a>
         </div>
       </div>
     </div>
@@ -1052,12 +434,12 @@
   <!-- ─── FAQ ─── -->
   <section class="faq" id="faq">
     <div class="wrap">
-      <div class="section-title">
+      <div class="section-title center anim">
         <span class="section-tag">FAQ</span>
         <h2>Frequently asked questions</h2>
         <p>Everything you need to know about SnapWrite AI.</p>
       </div>
-      <div class="faq-list">
+      <div class="faq-list anim">
 
         <div class="faq-item">
           <input type="checkbox" id="faq1" class="faq-toggle">
@@ -1067,7 +449,7 @@
           </label>
           <div class="faq-answer">
             <div class="faq-answer-inner">
-              Yes! The free plan gives you 5 AI actions per day with access to all six features: improve, reply, rewrite, summarize, fix grammar, and translate. No credit card or account required. If you need unlimited usage, you can upgrade to Pro for $9.99/month.
+              Yes! The free plan gives you 5 AI actions per day with access to all six features. No credit card or account required. If you need unlimited usage, you can upgrade to Pro for $9.99/month (or $7.99/month billed annually).
             </div>
           </div>
         </div>
@@ -1080,7 +462,7 @@
           </label>
           <div class="faq-answer">
             <div class="faq-answer-inner">
-              SnapWrite works on every website you visit in Chrome. If you can select text on a page, SnapWrite can improve it — emails, social media, documents, messaging apps, and anything else on the web.
+              SnapWrite works on every website you visit in Chrome. If you can select text on a page, SnapWrite can improve it &mdash; emails, social media, documents, messaging apps, and anything else on the web.
             </div>
           </div>
         </div>
@@ -1101,6 +483,19 @@
         <div class="faq-item">
           <input type="checkbox" id="faq4" class="faq-toggle">
           <label for="faq4" class="faq-question">
+            How do I activate my Pro license?
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              After purchasing Pro, you'll receive a license key (format: SW-XXXX-XXXX-XXXX-XXXX). Open the extension settings page and paste your key in the "Pro License" section. Click "Activate" and you're all set with unlimited usage.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <input type="checkbox" id="faq5" class="faq-toggle">
+          <label for="faq5" class="faq-question">
             What languages are supported?
             <span class="faq-icon">+</span>
           </label>
@@ -1112,14 +507,27 @@
         </div>
 
         <div class="faq-item">
-          <input type="checkbox" id="faq5" class="faq-toggle">
-          <label for="faq5" class="faq-question">
+          <input type="checkbox" id="faq6" class="faq-toggle">
+          <label for="faq6" class="faq-question">
+            Can I cancel my subscription?
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Absolutely. You can cancel your Pro subscription at any time through the subscription management portal. Click "Manage your plan" on the pricing section or in the extension settings. Your Pro access continues until the end of your billing period.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <input type="checkbox" id="faq7" class="faq-toggle">
+          <label for="faq7" class="faq-question">
             Is my data private and secure?
             <span class="faq-icon">+</span>
           </label>
           <div class="faq-answer">
             <div class="faq-answer-inner">
-              Absolutely. SnapWrite does not store, log, or sell your text. Your selected text is sent to the AI for processing and the result is returned directly to you. We do not keep copies of your writing. Read our full privacy policy for more details.
+              Yes. SnapWrite does not store, log, or sell your text. Your selected text is sent to the AI for processing and the result is returned directly to you. We do not keep copies of your writing. Read our full <a href="privacy.html">privacy policy</a> for more details.
             </div>
           </div>
         </div>
@@ -1130,27 +538,62 @@
 
   <!-- ─── Final CTA ─── -->
   <section class="cta" id="install">
-    <div class="wrap">
+    <div class="wrap anim">
       <h2>Ready to write better? Start now.</h2>
-      <p>Install SnapWrite AI and start writing faster and clearer today.</p>
-      <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="btn-primary" style="margin:0 auto 16px;text-decoration:none;">
+      <p>Install SnapWrite AI and transform your writing across every website.</p>
+      <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="btn-primary" style="text-decoration:none;">
         <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#fff"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#fff"/></svg>
         Add to Chrome &mdash; It's Free
       </a>
       <div class="cta-meta">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.5)" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" style="vertical-align:-2px;margin-right:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
         Free forever &middot; No signup required &middot; Installs in 10 seconds
       </div>
     </div>
   </section>
 
-
   <!-- ─── Footer ─── -->
   <footer>
     <div class="wrap">
-      <p>&copy; 2026 SnapWrite AI. All rights reserved. &middot; <a href="privacy.html">Privacy Policy</a></p>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <div class="nav-logo-icon">S</div>
+            SnapWrite AI
+          </div>
+          <p class="footer-desc">AI-powered writing assistant that works on every website. Select, improve, done.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#how">How It Works</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="mailto:support@snapwrite.io">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <a href="https://twitter.com/snapwriteai" target="_blank">Twitter / X</a>
+          <a href="https://github.com/parsa-faraji/snapwrite-ai" target="_blank">GitHub</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 SnapWrite AI. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 
+  <!-- Sticky Mobile CTA -->
+  <div class="mobile-cta" id="mobile-cta">
+    <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="btn-primary">
+      Add to Chrome &mdash; Free
+    </a>
+  </div>
+
+  <script src="main.js"></script>
 </body>
 </html>

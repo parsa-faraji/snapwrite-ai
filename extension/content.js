@@ -58,7 +58,6 @@
 
   let selectedText = "";
   let selectionRange = null;
-  let sessionResultCount = 0;
 
   // Chrome Web Store URL (update with your real extension ID)
   const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/snapwrite-ai/bpclponaiaeckhcpgfmojbkhkkgnlifg";

@@ -3,6 +3,23 @@ node_modules/
 *.zip
 test-results/
 .DS_Store
+Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+Desktop.ini
+
+# Build output
+dist/
+
+# Waitlist data (generated at runtime)
+waitlist.txt

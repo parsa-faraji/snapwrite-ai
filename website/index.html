@@ -5,25 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SnapWrite AI — AI Writing Assistant for Every Website</title>
   <meta name="description" content="Select any text on any website to instantly improve, rewrite, reply, summarize, fix grammar, or translate. Free Chrome extension powered by AI.">
-
-  <!-- Open Graph -->
   <meta property="og:title" content="SnapWrite AI — AI Writing Assistant for Every Website">
   <meta property="og:description" content="Select any text on any website to instantly improve, rewrite, reply, summarize, fix grammar, or translate with AI.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://snapwrite.io">
   <meta property="og:image" content="https://snapwrite.io/assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- ─── Nav ─── -->
   <nav>
     <div class="wrap">
       <a href="#" class="nav-logo">
@@ -35,73 +29,49 @@
         <a href="#how">How It Works</a>
         <a href="#pricing">Pricing</a>
         <a href="#faq">FAQ</a>
-        <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="nav-cta">Add to Chrome &mdash; Free</a>
+        <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="nav-cta">Add to Chrome</a>
       </div>
-      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false">
         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
       </button>
     </div>
   </nav>
 
-  <!-- Mobile menu -->
   <div class="mobile-menu" id="mobile-menu">
     <a href="#features">Features</a>
     <a href="#how">How It Works</a>
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
-    <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg">Add to Chrome &mdash; Free</a>
+    <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg">Add to Chrome</a>
   </div>
 
   <!-- ─── Hero ─── -->
   <section class="hero">
     <div class="wrap">
       <div class="hero-content anim">
-        <div class="hero-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          AI Writing Assistant for Chrome
-        </div>
-        <h1>
-          Write better,<br>
-          <span class="gradient">everywhere on the web.</span>
-        </h1>
+        <h1>Write better,<br><em>everywhere on the web.</em></h1>
         <p class="hero-sub">
-          Select any text on any website. Instantly improve, rewrite, reply,
-          summarize, fix grammar, or translate it with AI. One click.
+          Select any text on any website. One click to improve, rewrite, reply,
+          summarize, fix grammar, or translate with AI.
         </p>
         <div class="hero-cta-group">
           <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="btn-primary">
-            <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#fff"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#fff"/></svg>
-            Add to Chrome &mdash; Free
+            <svg width="18" height="18" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#faf8f5"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#faf8f5"/></svg>
+            Add to Chrome &mdash; it's free
           </a>
-          <a href="#demo" class="btn-secondary">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#4f46e5" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Watch Demo
-          </a>
+          <a href="#demo" class="btn-secondary">See how it works</a>
         </div>
         <div class="hero-meta">
-          <span class="hero-meta-item">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            Installs in 10 seconds
-          </span>
-          <span class="hero-meta-item">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            No signup required
-          </span>
-          <span class="hero-meta-item">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#10b981" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            Free forever
-          </span>
+          <span class="hero-meta-item">No signup required</span>
+          <span class="hero-meta-item">&middot;</span>
+          <span class="hero-meta-item">5 free uses per day</span>
+          <span class="hero-meta-item">&middot;</span>
+          <span class="hero-meta-item">Works on every website</span>
         </div>
       </div>
       <div class="hero-visual anim">
-        <!-- Product screenshot — replace with real screenshot from Playwright -->
-        <img src="assets/hero-screenshot.png" alt="SnapWrite AI toolbar appearing over selected text on a webpage" class="hero-screenshot"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <!-- Fallback if screenshot doesn't exist yet -->
-        <div style="display:none; width:100%; max-width:520px; aspect-ratio:4/3; background:linear-gradient(135deg,#ede9fe,#e0e7ff); border-radius:16px; align-items:center; justify-content:center; flex-direction:column; gap:12px; box-shadow:0 20px 60px rgba(0,0,0,0.08);">
-          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#4f46e5" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          <span style="color:#4f46e5; font-size:14px; font-weight:600;">Product screenshot coming soon</span>
-        </div>
+        <img src="assets/hero-screenshot.png" alt="SnapWrite AI improving an email draft" class="hero-screenshot"
+             onerror="this.style.display='none'">
       </div>
     </div>
   </section>
@@ -111,55 +81,23 @@
     <div class="wrap">
       <div class="works-on-label">Works everywhere you write</div>
       <div class="works-on-logos">
-        <div class="works-on-item">
-          <div class="works-on-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 18h-2V9.25L12 13 6 9.25V18H4V6h1.2l6.8 4.25L18.8 6H20v12z" fill="#EA4335"/><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z" fill="none" stroke="#EA4335" stroke-width="1.2"/></svg>
-          </div>
-          Gmail
-        </div>
-        <div class="works-on-item">
-          <div class="works-on-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="13" x2="16" y2="13" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="17" x2="13" y2="17" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </div>
-          Google Docs
-        </div>
-        <div class="works-on-item">
-          <div class="works-on-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </div>
-          X / Twitter
-        </div>
-        <div class="works-on-item">
-          <div class="works-on-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.884 20.452H3.79V9h3.094v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </div>
-          LinkedIn
-        </div>
-        <div class="works-on-item">
-          <div class="works-on-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5 0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5c0 .83-.67 1.5-1.5 1.5zm-5 0C8.67 10 8 9.33 8 8.5S8.67 7 9.5 7s1.5.67 1.5 1.5S10.33 10 9.5 10z" fill="#611f69"/><path d="M6 2h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z" stroke="#611f69" stroke-width="1.5" fill="none"/><path d="M9 14.5c0 1.5 1.5 3 3 3s3-1.5 3-3" stroke="#611f69" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </div>
-          Slack
-        </div>
-        <div class="works-on-item">
-          <div class="works-on-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF4500"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 13.38c.15.36.22.75.22 1.12 0 2.58-3.01 4.68-6.73 4.68S3.77 17.08 3.77 14.5c0-.37.08-.76.22-1.12a1.38 1.38 0 0 1-.72-1.22c0-.78.63-1.4 1.4-1.4.38 0 .72.15.98.39 1.2-.86 2.82-1.39 4.6-1.44l.88-4.12a.3.3 0 0 1 .36-.24l2.92.62a1.05 1.05 0 0 1 2 .48 1.05 1.05 0 0 1-1.96.37l-2.6-.55-.78 3.67c1.73.07 3.3.6 4.47 1.44.25-.24.6-.39.97-.39.78 0 1.4.63 1.4 1.4 0 .5-.26.94-.66 1.19zM9.5 13a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 0 0 0-2.3zm5 0a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 0 0 0-2.3zm-4.87 3.63c-.06-.06-.06-.16 0-.22a.16.16 0 0 1 .22 0c.68.68 1.74.73 2.15.73s1.47-.05 2.15-.73a.16.16 0 0 1 .22 0c.06.06.06.16 0 .22-.78.78-2 .83-2.37.83s-1.59-.05-2.37-.83z"/></svg>
-          </div>
-          Reddit
-        </div>
+        <div class="works-on-item"><div class="works-on-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 18h-2V9.25L12 13 6 9.25V18H4V6h1.2l6.8 4.25L18.8 6H20v12z" fill="#EA4335"/><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6z" fill="none" stroke="#EA4335" stroke-width="1.2"/></svg></div>Gmail</div>
+        <div class="works-on-item"><div class="works-on-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#4285F4" stroke-width="1.5"/><polyline points="14 2 14 8 20 8" stroke="#4285F4" stroke-width="1.5"/><line x1="8" y1="13" x2="16" y2="13" stroke="#4285F4" stroke-width="1.5"/><line x1="8" y1="17" x2="13" y2="17" stroke="#4285F4" stroke-width="1.5"/></svg></div>Docs</div>
+        <div class="works-on-item"><div class="works-on-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#2d2a26"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>X</div>
+        <div class="works-on-item"><div class="works-on-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.884 20.452H3.79V9h3.094v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>LinkedIn</div>
+        <div class="works-on-item"><div class="works-on-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#611f69" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M9 14.5c0 1.5 1.5 3 3 3s3-1.5 3-3" stroke-linecap="round"/><circle cx="9.5" cy="8.5" r="1.5" fill="#611f69" stroke="none"/><circle cx="14.5" cy="8.5" r="1.5" fill="#611f69" stroke="none"/></svg></div>Slack</div>
+        <div class="works-on-item"><div class="works-on-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="#FF4500"><circle cx="12" cy="12" r="12"/><path d="M17.01 13.38c.15.36.22.75.22 1.12 0 2.58-3.01 4.68-6.73 4.68S3.77 17.08 3.77 14.5c0-.37.08-.76.22-1.12" fill="#fff"/></svg></div>Reddit</div>
       </div>
     </div>
   </section>
 
-  <!-- ─── Interactive Demo ─── -->
+  <!-- ─── Demo ─── -->
   <section class="demo-section" id="demo">
     <div class="wrap">
       <div class="section-title center anim">
-        <span class="section-tag">See It In Action</span>
-        <h2>From rough draft to polished writing in one click</h2>
+        <h2>From rough draft to polished<br>writing in one click</h2>
         <p>Watch how SnapWrite transforms your writing instantly, right where you type.</p>
       </div>
-
       <div class="demo-browser anim" id="demo-interactive">
         <div class="demo-browser-bar">
           <span class="demo-browser-dot"></span>
@@ -168,24 +106,13 @@
           <span class="demo-browser-url">compose.email.com/new</span>
         </div>
         <div class="demo-content">
-          <!-- Step 1: Raw text -->
           <div class="demo-step active">
             <h3>Step 1 &mdash; You write a rough draft</h3>
-            <p class="demo-text">
-              hey mike, wanted to <span class="error">follw</span> up on the thing we
-              <span class="error">talk</span> about last week. i think we should
-              <span class="error">definately</span> move forward with the project
-              <span class="error">becuase</span> its going to be really good for the team
-              and <span class="error">eveyone</span> will benefit from it.
-            </p>
+            <p class="demo-text">hey mike, wanted to <span class="error">follw</span> up on the thing we <span class="error">talk</span> about last week. i think we should <span class="error">definately</span> move forward with the project <span class="error">becuase</span> its going to be really good for the team and <span class="error">eveyone</span> will benefit from it.</p>
           </div>
-
-          <!-- Step 2: Select + toolbar -->
           <div class="demo-step">
-            <h3>Step 2 &mdash; Select the text</h3>
-            <p class="demo-text">
-              <span class="highlight">hey mike, wanted to follw up on the thing we talk about last week. i think we should definately move forward with the project becuase its going to be really good for the team and eveyone will benefit from it.</span>
-            </p>
+            <h3>Step 2 &mdash; Select and pick an action</h3>
+            <p class="demo-text"><span class="highlight">hey mike, wanted to follw up on the thing we talk about last week. i think we should definately move forward with the project becuase its going to be really good for the team and eveyone will benefit from it.</span></p>
             <div class="demo-toolbar">
               <button class="demo-toolbar-btn active">Improve</button>
               <button class="demo-toolbar-btn">Reply</button>
@@ -195,16 +122,11 @@
               <button class="demo-toolbar-btn">Translate</button>
             </div>
           </div>
-
-          <!-- Step 3: Result -->
           <div class="demo-step">
-            <h3>Step 3 &mdash; Polished in one click</h3>
-            <div class="demo-result">
-              Hi Mike, I wanted to follow up on our conversation from last week. I believe we should move forward with the project &mdash; it will have a meaningful impact on the team, and everyone stands to benefit from it. Let me know when you're available to discuss the next steps.
-            </div>
+            <h3>Step 3 &mdash; Done</h3>
+            <div class="demo-result">Hi Mike, I wanted to follow up on our conversation from last week. I believe we should move forward with the project &mdash; it will have a meaningful impact on the team, and everyone stands to benefit from it. Let me know when you're available to discuss the next steps.</div>
           </div>
         </div>
-
         <div class="demo-dots">
           <button class="demo-dot active" aria-label="Step 1"></button>
           <button class="demo-dot" aria-label="Step 2"></button>
@@ -214,87 +136,47 @@
     </div>
   </section>
 
-  <!-- ─── Video Demo ─── -->
-  <section class="video-section" id="video">
-    <div class="wrap">
-      <div class="section-title center anim">
-        <span class="section-tag">Demo Video</span>
-        <h2>See SnapWrite in the real world</h2>
-        <p>Watch a 30-second walkthrough of the extension on a real website.</p>
-      </div>
-      <div class="video-container anim">
-        <!-- Replace with <video src="assets/demo.mp4" autoplay muted loop playsinline> when ready -->
-        <div class="video-placeholder">
-          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#64748b" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <p>Demo video coming soon</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── Stats Bar ─── -->
-  <section class="stats-bar anim">
-    <div class="wrap">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <h3>6</h3>
-          <p>AI Actions</p>
-        </div>
-        <div class="stat-item">
-          <h3>9+</h3>
-          <p>Languages</p>
-        </div>
-        <div class="stat-item">
-          <h3>Every</h3>
-          <p>Website Supported</p>
-        </div>
-        <div class="stat-item">
-          <h3>Free</h3>
-          <p>Forever</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── Features ─── -->
+  <!-- ─── Features (editorial alternating) ─── -->
   <section class="features" id="features">
     <div class="wrap">
-      <div class="section-title center anim">
-        <span class="section-tag">Features</span>
-        <h2>Six powerful AI actions at your fingertips</h2>
-        <p>One extension. One click. Six ways to write better.</p>
+      <div class="section-title anim">
+        <h2>Six ways to write better,<br>without leaving the page.</h2>
       </div>
-      <div class="feature-grid">
-        <div class="feature-card anim">
-          <div class="feature-icon">&#10024;</div>
-          <h3>Improve</h3>
-          <p>Make any text clearer, more engaging, and polished. Perfect for emails, posts, and important messages.</p>
+
+      <div class="feature-row anim">
+        <div class="feature-text">
+          <h3>Improve your writing</h3>
+          <p>Make any text clearer, more engaging, and polished. SnapWrite rewrites your words while keeping your voice intact. Perfect for emails you'll read three times before sending.</p>
+          <span class="feature-detail">Works on any selected text across the web</span>
         </div>
-        <div class="feature-card anim">
-          <div class="feature-icon">&#128172;</div>
-          <h3>Smart Reply</h3>
-          <p>Generate contextual replies to any message. Works on email, social media, chat apps, and more.</p>
+        <div class="feature-visual"><div class="feature-visual-text">Aa</div></div>
+      </div>
+
+      <div class="feature-row reverse anim">
+        <div class="feature-text">
+          <h3>Smart replies in context</h3>
+          <p>Select a message, click Reply, and get a thoughtful response that matches the tone of the conversation. No more staring at a blank reply box.</p>
+          <span class="feature-detail">Reads context to generate relevant replies</span>
         </div>
-        <div class="feature-card anim">
-          <div class="feature-icon">&#9999;&#65039;</div>
-          <h3>Rewrite</h3>
-          <p>Change the tone to professional, casual, shorter, or longer. Adapt your writing for any audience.</p>
+        <div class="feature-visual"><div class="feature-visual-text">&larr;</div></div>
+      </div>
+
+      <div class="feature-row anim">
+        <div class="feature-text">
+          <h3>Rewrite in any tone</h3>
+          <p>Professional for the client email. Casual for the Slack message. Shorter when you're rambling. Longer when you need more detail. One click to shift tone.</p>
+          <span class="feature-detail">Professional, casual, shorter, or longer</span>
         </div>
-        <div class="feature-card anim">
-          <div class="feature-icon">&#128203;</div>
-          <h3>Summarize</h3>
-          <p>Turn long articles, emails, or docs into concise summaries. Save hours of reading every week.</p>
+        <div class="feature-visual"><div class="feature-visual-text">&harr;</div></div>
+      </div>
+
+      <div class="feature-row reverse anim">
+        <div class="feature-text">
+          <h3>Summarize, fix grammar, translate</h3>
+          <p>Condense long threads into key points. Fix spelling and grammar without changing meaning. Translate between 9+ languages. Three more tools, always one click away.</p>
+          <span class="feature-detail">Also available via right-click menu and Alt+Q</span>
         </div>
-        <div class="feature-card anim">
-          <div class="feature-icon">&#9989;</div>
-          <h3>Fix Grammar</h3>
-          <p>Instantly fix spelling, grammar, and punctuation while keeping your voice and meaning intact.</p>
-        </div>
-        <div class="feature-card anim">
-          <div class="feature-icon">&#127760;</div>
-          <h3>Translate</h3>
-          <p>Translate text to and from 9+ languages without leaving the page you're on.</p>
-        </div>
+        <div class="feature-visual"><div class="feature-visual-text">&Sigma;</div></div>
       </div>
     </div>
   </section>
@@ -302,71 +184,58 @@
   <!-- ─── How It Works ─── -->
   <section class="how" id="how">
     <div class="wrap">
-      <div class="section-title center anim">
-        <span class="section-tag">How It Works</span>
-        <h2>Start writing better in 10 seconds</h2>
+      <div class="section-title anim">
+        <h2>Start writing better<br>in ten seconds.</h2>
         <p>No account. No setup. No learning curve.</p>
       </div>
-      <div class="steps anim">
-        <div class="step">
-          <div class="step-num">
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          </div>
-          <span class="step-label">Step 1</span>
+      <div class="how-steps anim">
+        <div class="how-step">
+          <div class="how-step-num">01</div>
           <h3>Install the extension</h3>
-          <p>Add SnapWrite AI to Chrome. One click, no signup.</p>
+          <p>Add SnapWrite AI to Chrome from the Web Store. One click, no signup, no API key needed.</p>
         </div>
-        <div class="step">
-          <div class="step-num">
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
-          </div>
-          <span class="step-label">Step 2</span>
+        <div class="how-step">
+          <div class="how-step-num">02</div>
           <h3>Select any text</h3>
-          <p>Highlight text on any website. The toolbar appears instantly.</p>
+          <p>Highlight text on any website. A floating toolbar appears above your selection with six AI actions.</p>
         </div>
-        <div class="step">
-          <div class="step-num">
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          </div>
-          <span class="step-label">Step 3</span>
-          <h3>Pick an action</h3>
-          <p>Improve, reply, rewrite, summarize, fix, or translate.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-          </div>
-          <span class="step-label">Step 4</span>
-          <h3>Done</h3>
-          <p>Copy or insert the result. No tab switching, no copy-paste.</p>
+        <div class="how-step">
+          <div class="how-step-num">03</div>
+          <h3>Pick an action, done</h3>
+          <p>Click Improve, Reply, Rewrite, Summarize, Fix, or Translate. The result appears instantly. Copy or insert it.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── Why SnapWrite ─── -->
-  <section class="why" id="why">
+  <!-- ─── Comparison ─── -->
+  <section class="comparison">
     <div class="wrap">
       <div class="section-title center anim">
-        <span class="section-tag">Why SnapWrite</span>
-        <h2>Stop copy-pasting to ChatGPT</h2>
-        <p>SnapWrite brings AI writing directly to every text field on the web.</p>
+        <h2>Stop tab-switching<br>to ChatGPT.</h2>
       </div>
-      <div class="why-grid">
-        <div class="why-card negative anim">
-          <div class="why-icon">&#128337;</div>
-          <h3>The old way</h3>
-          <p>Select &rarr; copy &rarr; open ChatGPT &rarr; paste &rarr; prompt &rarr; wait &rarr; copy &rarr; switch back &rarr; paste. <strong>8 steps.</strong></p>
+      <div class="comparison-grid anim">
+        <div class="comparison-card old">
+          <h3>Without SnapWrite</h3>
+          <ol class="comparison-steps">
+            <li>Select text</li>
+            <li>Copy</li>
+            <li>Open ChatGPT</li>
+            <li>Paste</li>
+            <li>Write a prompt</li>
+            <li>Wait</li>
+            <li>Copy result</li>
+            <li>Switch back and paste</li>
+          </ol>
+          <div class="comparison-count">8 steps <span>Every single time</span></div>
         </div>
-        <div class="why-card positive anim">
-          <div class="why-icon">&#9889;</div>
-          <h3>The SnapWrite way</h3>
-          <p>Select text &rarr; click an action &rarr; done. <strong>2 steps.</strong> Results appear right where you're writing.</p>
-        </div>
-        <div class="why-card neutral anim">
-          <div class="why-icon">&#128274;</div>
-          <h3>Private by design</h3>
-          <p>Your text is processed and returned directly to you. Nothing is stored, logged, or sold. Your writing stays yours.</p>
+        <div class="comparison-card new">
+          <h3>With SnapWrite</h3>
+          <ol class="comparison-steps">
+            <li>Select text</li>
+            <li>Click an action</li>
+          </ol>
+          <div class="comparison-count">2 steps <span>Results appear in place</span></div>
         </div>
       </div>
     </div>
@@ -376,24 +245,16 @@
   <section class="pricing" id="pricing">
     <div class="wrap">
       <div class="section-title center anim">
-        <span class="section-tag">Pricing</span>
-        <h2>Start free. Upgrade when you need more.</h2>
-        <p>No credit card required. No hidden fees.</p>
+        <h2>Simple pricing,<br>no surprises.</h2>
+        <p>Start free. Upgrade when you need more.</p>
       </div>
-
-      <!-- Toggle -->
       <div class="pricing-toggle-wrap anim">
         <span class="pricing-toggle-label active">Monthly</span>
-        <label class="toggle-switch">
-          <input type="checkbox" id="pricing-toggle">
-          <span class="toggle-slider"></span>
-        </label>
+        <label class="toggle-switch"><input type="checkbox" id="pricing-toggle"><span class="toggle-slider"></span></label>
         <span class="pricing-toggle-label">Annual</span>
         <span class="pricing-toggle-save">Save 20%</span>
       </div>
-
       <div class="pricing-grid anim">
-        <!-- Free -->
         <div class="price-card">
           <h3>Free</h3>
           <div class="price-amount">$0 <span>/ month</span></div>
@@ -401,20 +262,18 @@
           <ul class="price-features">
             <li>All 6 AI writing actions</li>
             <li>Works on every website</li>
-            <li>9+ languages supported</li>
+            <li>9+ languages</li>
             <li>No account required</li>
             <li>5 uses per day</li>
           </ul>
-          <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="price-btn outline">Add to Chrome &mdash; Free</a>
+          <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="price-btn outline">Add to Chrome</a>
         </div>
-
-        <!-- Pro -->
         <div class="price-card featured">
           <div class="price-badge">Most Popular</div>
           <h3>Pro</h3>
           <div class="price-amount price-monthly">$9.99 <span>/ month</span></div>
           <div class="price-amount price-annual" style="display:none;">$7.99 <span>/ month</span></div>
-          <div class="price-desc">For professionals who write daily</div>
+          <div class="price-desc">Unlimited usage for professionals</div>
           <ul class="price-features">
             <li>Unlimited AI actions</li>
             <li>All 6 writing actions</li>
@@ -422,10 +281,9 @@
             <li>Email support</li>
             <li>7-day free trial</li>
           </ul>
-          <!-- Replace href with your Stripe Payment Link when ready -->
-          <a href="#" class="price-btn primary link-monthly">Start 7-Day Free Trial</a>
-          <a href="#" class="price-btn primary link-annual" style="display:none;">Start 7-Day Free Trial</a>
-          <a href="#" class="manage-link">Already a subscriber? Manage your plan</a>
+          <a href="#" class="price-btn primary link-monthly">Start free trial</a>
+          <a href="#" class="price-btn primary link-annual" style="display:none;">Start free trial</a>
+          <a href="#" class="manage-link">Manage your subscription</a>
         </div>
       </div>
     </div>
@@ -435,163 +293,49 @@
   <section class="faq" id="faq">
     <div class="wrap">
       <div class="section-title center anim">
-        <span class="section-tag">FAQ</span>
-        <h2>Frequently asked questions</h2>
-        <p>Everything you need to know about SnapWrite AI.</p>
+        <h2>Questions &amp; answers</h2>
       </div>
       <div class="faq-list anim">
-
-        <div class="faq-item">
-          <input type="checkbox" id="faq1" class="faq-toggle">
-          <label for="faq1" class="faq-question">
-            Is SnapWrite AI really free?
-            <span class="faq-icon">+</span>
-          </label>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              Yes! The free plan gives you 5 AI actions per day with access to all six features. No credit card or account required. If you need unlimited usage, you can upgrade to Pro for $9.99/month (or $7.99/month billed annually).
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <input type="checkbox" id="faq2" class="faq-toggle">
-          <label for="faq2" class="faq-question">
-            What websites does it work on?
-            <span class="faq-icon">+</span>
-          </label>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              SnapWrite works on every website you visit in Chrome. If you can select text on a page, SnapWrite can improve it &mdash; emails, social media, documents, messaging apps, and anything else on the web.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <input type="checkbox" id="faq3" class="faq-toggle">
-          <label for="faq3" class="faq-question">
-            Do I need to create an account?
-            <span class="faq-icon">+</span>
-          </label>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              No. SnapWrite works immediately after installation. There is no signup, no login, and no account creation needed. Just install the extension and start selecting text to improve.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <input type="checkbox" id="faq4" class="faq-toggle">
-          <label for="faq4" class="faq-question">
-            How do I activate my Pro license?
-            <span class="faq-icon">+</span>
-          </label>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              After purchasing Pro, you'll receive a license key (format: SW-XXXX-XXXX-XXXX-XXXX). Open the extension settings page and paste your key in the "Pro License" section. Click "Activate" and you're all set with unlimited usage.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <input type="checkbox" id="faq5" class="faq-toggle">
-          <label for="faq5" class="faq-question">
-            What languages are supported?
-            <span class="faq-icon">+</span>
-          </label>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              SnapWrite supports 9+ languages for translation and can improve, rewrite, and fix grammar in any language that our AI model supports. This includes English, Spanish, French, German, Portuguese, Italian, Dutch, Russian, Chinese, Japanese, Korean, and more.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <input type="checkbox" id="faq6" class="faq-toggle">
-          <label for="faq6" class="faq-question">
-            Can I cancel my subscription?
-            <span class="faq-icon">+</span>
-          </label>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              Absolutely. You can cancel your Pro subscription at any time through the subscription management portal. Click "Manage your plan" on the pricing section or in the extension settings. Your Pro access continues until the end of your billing period.
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <input type="checkbox" id="faq7" class="faq-toggle">
-          <label for="faq7" class="faq-question">
-            Is my data private and secure?
-            <span class="faq-icon">+</span>
-          </label>
-          <div class="faq-answer">
-            <div class="faq-answer-inner">
-              Yes. SnapWrite does not store, log, or sell your text. Your selected text is sent to the AI for processing and the result is returned directly to you. We do not keep copies of your writing. Read our full <a href="privacy.html">privacy policy</a> for more details.
-            </div>
-          </div>
-        </div>
-
+        <div class="faq-item"><input type="checkbox" id="faq1" class="faq-toggle"><label for="faq1" class="faq-question">Is SnapWrite AI really free? <span class="faq-icon">+</span></label><div class="faq-answer"><div class="faq-answer-inner">Yes. The free plan gives you 5 AI actions per day with access to all six features. No credit card or account required. Upgrade to Pro for unlimited usage.</div></div></div>
+        <div class="faq-item"><input type="checkbox" id="faq2" class="faq-toggle"><label for="faq2" class="faq-question">What websites does it work on? <span class="faq-icon">+</span></label><div class="faq-answer"><div class="faq-answer-inner">Every website you visit in Chrome. If you can select text on a page, SnapWrite can improve it &mdash; emails, social media, documents, messaging apps, and anything else on the web.</div></div></div>
+        <div class="faq-item"><input type="checkbox" id="faq3" class="faq-toggle"><label for="faq3" class="faq-question">Do I need to create an account? <span class="faq-icon">+</span></label><div class="faq-answer"><div class="faq-answer-inner">No. SnapWrite works immediately after installation. No signup, no login, no account needed.</div></div></div>
+        <div class="faq-item"><input type="checkbox" id="faq4" class="faq-toggle"><label for="faq4" class="faq-question">How do I activate Pro? <span class="faq-icon">+</span></label><div class="faq-answer"><div class="faq-answer-inner">After purchasing Pro, you'll receive a license key. Open the extension settings and paste your key in the "Pro License" section. Click "Activate" and you're set.</div></div></div>
+        <div class="faq-item"><input type="checkbox" id="faq5" class="faq-toggle"><label for="faq5" class="faq-question">Is my data private? <span class="faq-icon">+</span></label><div class="faq-answer"><div class="faq-answer-inner">Yes. SnapWrite does not store, log, or sell your text. Your writing is sent to the AI for processing and returned directly to you. Read our full <a href="privacy.html">privacy policy</a>.</div></div></div>
+        <div class="faq-item"><input type="checkbox" id="faq6" class="faq-toggle"><label for="faq6" class="faq-question">Can I cancel anytime? <span class="faq-icon">+</span></label><div class="faq-answer"><div class="faq-answer-inner">Absolutely. Cancel your Pro subscription anytime through the subscription management portal. Your access continues until the end of your billing period.</div></div></div>
       </div>
     </div>
   </section>
 
-  <!-- ─── Final CTA ─── -->
+  <!-- ─── CTA ─── -->
   <section class="cta" id="install">
     <div class="wrap anim">
-      <h2>Ready to write better? Start now.</h2>
-      <p>Install SnapWrite AI and transform your writing across every website.</p>
+      <h2>Ready to write better?</h2>
+      <p>Install SnapWrite AI and stop copy-pasting to ChatGPT.</p>
       <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="btn-primary" style="text-decoration:none;">
-        <svg width="20" height="20" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#fff"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#fff"/></svg>
-        Add to Chrome &mdash; It's Free
+        <svg width="18" height="18" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.5" fill="#faf8f5"/><path d="M24 13.5A10.5 10.5 0 0 0 14.58 20H3.05a21 21 0 0 1 39.9 0H31.42A10.5 10.5 0 0 0 24 13.5z" fill="#DB4437"/><path d="M14.58 20a10.5 10.5 0 0 0 4.92 12.75L13.72 43.5A21 21 0 0 1 3.05 20z" fill="#0F9D58"/><path d="M19.5 32.75A10.5 10.5 0 0 0 34.5 24h10.45a21 21 0 0 1-31.23 19.5z" fill="#4285F4"/><path d="M31.42 20A10.5 10.5 0 0 1 34.5 24H44.95a21 21 0 0 0-1.95-4z" fill="#FFCD40"/><circle cx="24" cy="24" r="7" fill="#faf8f5"/></svg>
+        Add to Chrome &mdash; it's free
       </a>
-      <div class="cta-meta">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" style="vertical-align:-2px;margin-right:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        Free forever &middot; No signup required &middot; Installs in 10 seconds
-      </div>
+      <div class="cta-meta">No signup &middot; 5 free uses per day &middot; Works everywhere</div>
     </div>
   </section>
 
-  <!-- ─── Footer ─── -->
   <footer>
     <div class="wrap">
       <div class="footer-grid">
         <div>
-          <div class="footer-brand">
-            <div class="nav-logo-icon">S</div>
-            SnapWrite AI
-          </div>
-          <p class="footer-desc">AI-powered writing assistant that works on every website. Select, improve, done.</p>
+          <div class="footer-brand"><div class="nav-logo-icon">S</div> SnapWrite AI</div>
+          <p class="footer-desc">AI writing assistant that lives in your browser. Select, improve, done.</p>
         </div>
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#features">Features</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#how">How It Works</a>
-          <a href="#faq">FAQ</a>
-        </div>
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="mailto:support@snapwrite.io">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Connect</h4>
-          <a href="https://twitter.com/snapwriteai" target="_blank">Twitter / X</a>
-          <a href="https://github.com/parsa-faraji/snapwrite-ai" target="_blank">GitHub</a>
-        </div>
+        <div class="footer-col"><h4>Product</h4><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#how">How It Works</a><a href="#faq">FAQ</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="privacy.html">Privacy Policy</a><a href="mailto:support@snapwrite.io">Contact</a></div>
+        <div class="footer-col"><h4>Connect</h4><a href="https://twitter.com/snapwriteai" target="_blank">Twitter / X</a><a href="https://github.com/parsa-faraji/snapwrite-ai" target="_blank">GitHub</a></div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 SnapWrite AI. All rights reserved.</p>
-      </div>
+      <div class="footer-bottom">&copy; 2026 SnapWrite AI</div>
     </div>
   </footer>
 
-  <!-- Sticky Mobile CTA -->
   <div class="mobile-cta" id="mobile-cta">
-    <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="btn-primary">
-      Add to Chrome &mdash; Free
-    </a>
+    <a href="https://chrome.google.com/webstore/detail/ehehgmbgmnnaedmfgofgpfofhhjbnheg" class="btn-primary">Add to Chrome &mdash; Free</a>
   </div>
 
   <script src="main.js"></script>

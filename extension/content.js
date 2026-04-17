@@ -65,15 +65,6 @@
 
   // ── Viral Growth Helpers ───────────────────────────────────────
 
-  async function checkIfPro() {
-    try {
-      const resp = await chrome.runtime.sendMessage({ type: "IS_PRO" });
-      return resp && resp.pro === true;
-    } catch {
-      return false;
-    }
-  }
-
   async function getLifetimeResultCount() {
     const data = await chrome.storage.local.get("snapwrite_lifetime_uses");
     return data.snapwrite_lifetime_uses || 0;
@@ -427,14 +418,8 @@
       </div>`;
     positionResult();
 
-    result.querySelector(".qw-copy").addEventListener("click", async () => {
-      // Check if user is Pro to decide on watermark
-      const pro = await checkIfPro();
-      const copyText = pro
-        ? text
-        : text + "\n\n\u2014 Written with SnapWrite AI (Free Chrome Extension)";
-
-      navigator.clipboard.writeText(copyText).then(() => {
+    result.querySelector(".qw-copy").addEventListener("click", () => {
+      navigator.clipboard.writeText(text).then(() => {
         const btn = result.querySelector(".qw-copy");
         btn.innerHTML = `${ICONS.check} Copied!`;
         setTimeout(() => (btn.innerHTML = `${ICONS.copy} Copy`), 1500);

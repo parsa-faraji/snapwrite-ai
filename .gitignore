@@ -20,6 +20,3 @@ Desktop.ini
 
 # Build output
 dist/
-
-# Waitlist data (generated at runtime)
-waitlist.txt

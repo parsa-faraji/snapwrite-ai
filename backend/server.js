@@ -11,7 +11,7 @@ const AI_PROVIDER = process.env.AI_PROVIDER || "openai"; // "openai" or "anthrop
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "*").split(",");
 const RATE_LIMIT_PER_IP = 30; // requests per hour per IP
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
-const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;  
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 if (!OPENAI_API_KEY && !ANTHROPIC_API_KEY) {
   console.error("Either OPENAI_API_KEY or ANTHROPIC_API_KEY environment variable is required");
@@ -224,27 +224,6 @@ const server = createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/") {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end(JSON.stringify({ status: "ok", service: "snapwrite-api", provider: AI_PROVIDER }));
-  }
-
-  // Waitlist endpoint
-  if (req.method === "POST" && pathname === "/api/waitlist") {
-    try {
-      const body = await readBody(req);
-      const { email } = JSON.parse(body);
-      if (!email) {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        return res.end(JSON.stringify({ error: "email required" }));
-      }
-      // Append to file for persistence
-      const fs = await import("node:fs/promises");
-      await fs.appendFile("waitlist.txt", `${email},${new Date().toISOString()}\n`);
-      console.log(`Waitlist signup: ${email}`);
-      res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ ok: true }));
-    } catch (err) {
-      res.writeHead(500, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ error: "Failed to save" }));
-    }
   }
 
   // Main endpoint

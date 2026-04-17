@@ -12,6 +12,10 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "*").split(",");
 const RATE_LIMIT_PER_IP = 30; // requests per hour per IP
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+const STRIPE_PRICE_MONTHLY = process.env.STRIPE_PRICE_MONTHLY;
+const STRIPE_PRICE_ANNUAL = process.env.STRIPE_PRICE_ANNUAL;
+const CHECKOUT_SUCCESS_URL = process.env.CHECKOUT_SUCCESS_URL || "https://snapwrite.io/success.html";
+const CHECKOUT_CANCEL_URL = process.env.CHECKOUT_CANCEL_URL || "https://snapwrite.io/#pricing";
 
 if (!OPENAI_API_KEY && !ANTHROPIC_API_KEY) {
   console.error("Either OPENAI_API_KEY or ANTHROPIC_API_KEY environment variable is required");
@@ -300,6 +304,77 @@ const server = createServer(async (req, res) => {
       console.error("License validation error:", err.message);
       res.writeHead(500, { "Content-Type": "application/json" });
       return res.end(JSON.stringify({ error: "Validation failed" }));
+    }
+  }
+
+  // ── Stripe Checkout (create session + redirect) ──────────────────
+  if (req.method === "GET" && pathname === "/api/checkout") {
+    if (!stripe) {
+      res.writeHead(503, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Stripe not configured" }));
+    }
+
+    const plan = parsedUrl.searchParams.get("plan");
+    const priceId =
+      plan === "annual" ? STRIPE_PRICE_ANNUAL
+      : plan === "monthly" ? STRIPE_PRICE_MONTHLY
+      : null;
+
+    if (!priceId) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "plan must be 'monthly' or 'annual' and the matching STRIPE_PRICE_* env var must be set" }));
+    }
+
+    try {
+      const session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        line_items: [{ price: priceId, quantity: 1 }],
+        subscription_data: { trial_period_days: 7 },
+        allow_promotion_codes: true,
+        success_url: `${CHECKOUT_SUCCESS_URL}?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: CHECKOUT_CANCEL_URL,
+      });
+      res.writeHead(303, { Location: session.url });
+      return res.end();
+    } catch (err) {
+      console.error("Checkout session error:", err.message);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Failed to create checkout session" }));
+    }
+  }
+
+  // ── Retrieve Checkout Session (for post-purchase license lookup) ──
+  if (req.method === "GET" && pathname === "/api/checkout-session") {
+    if (!stripe) {
+      res.writeHead(503, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Stripe not configured" }));
+    }
+
+    try {
+      const sessionId = parsedUrl.searchParams.get("session_id");
+      if (!sessionId) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        return res.end(JSON.stringify({ error: "session_id required" }));
+      }
+
+      const session = await stripe.checkout.sessions.retrieve(sessionId, {
+        expand: ["customer"],
+      });
+
+      const customer = session.customer;
+      const licenseKey = customer?.metadata?.license_key || null;
+      const licenseStatus = customer?.metadata?.license_status || "pending";
+
+      res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({
+        license_key: licenseKey,
+        license_status: licenseStatus,
+        payment_status: session.payment_status,
+      }));
+    } catch (err) {
+      console.error("Checkout session retrieval error:", err.message);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      return res.end(JSON.stringify({ error: "Failed to retrieve session" }));
     }
   }
 

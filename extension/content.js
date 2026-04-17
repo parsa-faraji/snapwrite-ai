@@ -446,7 +446,7 @@
       </div>`;
     positionResult();
     result.querySelector(".qw-upgrade-btn").addEventListener("click", () => {
-      window.open("https://safaraji.gumroad.com/l/snapwrite-pro", "_blank");
+      window.open("https://snap-write-ai-production.up.railway.app/api/checkout?plan=monthly", "_blank");
     });
   }
 

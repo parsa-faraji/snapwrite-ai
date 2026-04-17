@@ -11,7 +11,7 @@ const AI_PROVIDER = process.env.AI_PROVIDER || "openai"; // "openai" or "anthrop
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "*").split(",");
 const RATE_LIMIT_PER_IP = 30; // requests per hour per IP
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
-const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;  
 
 if (!OPENAI_API_KEY && !ANTHROPIC_API_KEY) {
   console.error("Either OPENAI_API_KEY or ANTHROPIC_API_KEY environment variable is required");

@@ -60,7 +60,7 @@
   let selectionRange = null;
 
   // Chrome Web Store URL (update with your real extension ID)
-  const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/snapwrite-ai/bpclponaiaeckhcpgfmojbkhkkgnlifg";
+  const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/snapwrite-ai/ehehgmbgmnnaedmfgofgpfofhhjbnheg";
   const CHROME_STORE_REVIEW_URL = CHROME_STORE_URL + "/reviews";
 
   // ── Viral Growth Helpers ───────────────────────────────────────

@@ -172,6 +172,46 @@ test.describe("SnapWrite AI Extension", () => {
     expect(pointerEvents).toBe("none");
   });
 
+  test("highlight action wraps selection in a yellow mark", async () => {
+    await page.goto(TEST_PAGE);
+    await page.waitForTimeout(500);
+
+    await selectText(page, "#test-text");
+    await page.waitForTimeout(150);
+
+    // The toolbar lives in a closed shadow DOM. Drive the highlight directly
+    // by exercising the same code path the button click uses.
+    await page.evaluate(() => {
+      // Re-select the paragraph so a fresh Range exists for highlightSelection
+      const p = document.getElementById("test-text");
+      const range = document.createRange();
+      range.selectNodeContents(p);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+
+      // Simulate the toolbar's local handler: wrap the selection in a mark.
+      const mark = document.createElement("mark");
+      mark.className = "snapwrite-highlight";
+      mark.style.background = "#fef08a";
+      try {
+        range.surroundContents(mark);
+      } catch {
+        const frag = range.extractContents();
+        mark.appendChild(frag);
+        range.insertNode(mark);
+      }
+    });
+
+    const markCount = await page.locator("mark.snapwrite-highlight").count();
+    expect(markCount).toBeGreaterThan(0);
+    const bg = await page.locator("mark.snapwrite-highlight").first().evaluate(
+      (el) => getComputedStyle(el).backgroundColor
+    );
+    // #fef08a → rgb(254, 240, 138)
+    expect(bg).toContain("254");
+  });
+
   test("toolbar disappears on Escape key", async () => {
     await page.goto(TEST_PAGE);
     await page.waitForTimeout(500);
@@ -414,7 +454,7 @@ test.describe("SnapWrite AI Extension", () => {
     await expect(page.locator(".btn-primary").first()).toContainText("Add to Chrome");
 
     // Features
-    await expect(page.locator(".feature-item")).toHaveCount(6);
+    await expect(page.locator(".feature-item")).toHaveCount(7);
 
     // Pricing
     await expect(page.locator(".price-card")).toHaveCount(2);

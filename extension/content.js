@@ -39,6 +39,7 @@
         { id: "translate_english", label: "English" },
       ],
     },
+    { id: "highlight", label: "Highlight", icon: "marker", local: true },
   ];
 
   const ICONS = {
@@ -52,6 +53,7 @@
     close: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
     copy: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`,
     insert: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="m8 8 4-5 4 5"/></svg>`,
+    marker: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
   };
 
   // ── State ───────────────────────────────────────────────────────
@@ -289,6 +291,11 @@
           e.stopPropagation();
           toggleSubmenu(btn, action.submenu);
         });
+      } else if (action.local) {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          runLocalAction(action.id);
+        });
       } else {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -376,6 +383,37 @@
       }
     } catch (err) {
       showError(err.message || "Something went wrong");
+    }
+  }
+
+  // ── Local actions (no AI call, no quota) ────────────────────────
+
+  function runLocalAction(actionId) {
+    if (actionId === "highlight") {
+      highlightSelection();
+      hideAll();
+    }
+  }
+
+  function highlightSelection() {
+    if (!selectionRange) return;
+    try {
+      const mark = document.createElement("mark");
+      mark.className = "snapwrite-highlight";
+      mark.style.cssText = "background:#fef08a !important;color:inherit !important;padding:0 2px;border-radius:2px;";
+      // Range may span across nodes; surroundContents fails on partial nodes,
+      // so extract + wrap as a fallback.
+      try {
+        selectionRange.surroundContents(mark);
+      } catch {
+        const frag = selectionRange.extractContents();
+        mark.appendChild(frag);
+        selectionRange.insertNode(mark);
+      }
+      const sel = window.getSelection();
+      sel?.removeAllRanges();
+    } catch {
+      // Selection couldn't be wrapped (e.g., crosses non-editable boundaries).
     }
   }
 

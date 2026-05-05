@@ -4,7 +4,7 @@
   "description": "AI writing assistant Chrome extension -- improve, rewrite, reply, summarize, fix grammar, or translate any text on the web.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "playwright test"
   },
   "keywords": [],
   "author": "",

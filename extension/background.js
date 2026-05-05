@@ -54,6 +54,10 @@ async function incrementUsage() {
 }
 
 async function isPro() {
+  // BYO key — user pays their own API costs, so no quota applies.
+  const ownKey = await chrome.storage.sync.get("apiKey");
+  if (ownKey.apiKey) return true;
+
   const data = await chrome.storage.sync.get(["pro", "installedAt", "licenseKey"]);
   if (data.pro === true && data.licenseKey) return true;
 
@@ -192,34 +196,34 @@ async function callBackendProxy(action, text) {
 
 async function callAI(action, text) {
   const truncated = text.slice(0, 5000);
+  const settings = await getSettings();
 
-  // If backend proxy is configured, use it (users don't need API keys)
+  // BYO key path: user has their own API key → call provider directly,
+  // bypassing the backend proxy (and its quotas).
+  if (settings.apiKey) {
+    let prompt;
+    if (action.startsWith("translate_")) {
+      const lang = action.replace("translate_", "");
+      const langName = lang.charAt(0).toUpperCase() + lang.slice(1);
+      prompt = getTranslatePrompt(truncated, langName);
+    } else {
+      const promptFn = PROMPTS[action];
+      if (!promptFn) throw new Error(`Unknown action: ${action}`);
+      prompt = promptFn(truncated);
+    }
+
+    if (settings.provider === "anthropic") {
+      return callAnthropic(settings.apiKey, prompt);
+    }
+    return callOpenAI(settings.apiKey, prompt);
+  }
+
+  // No personal key — fall back to the hosted backend proxy.
   if (BACKEND_URL) {
     return callBackendProxy(action, truncated);
   }
 
-  // Otherwise, use direct API key mode
-  const settings = await getSettings();
-  if (!settings.apiKey) {
-    throw new Error("NO_API_KEY");
-  }
-
-  // Build prompt
-  let prompt;
-  if (action.startsWith("translate_")) {
-    const lang = action.replace("translate_", "");
-    const langName = lang.charAt(0).toUpperCase() + lang.slice(1);
-    prompt = getTranslatePrompt(truncated, langName);
-  } else {
-    const promptFn = PROMPTS[action];
-    if (!promptFn) throw new Error(`Unknown action: ${action}`);
-    prompt = promptFn(truncated);
-  }
-
-  if (settings.provider === "anthropic") {
-    return callAnthropic(settings.apiKey, prompt);
-  }
-  return callOpenAI(settings.apiKey, prompt);
+  throw new Error("NO_API_KEY");
 }
 
 // ── Message Handler ─────────────────────────────────────────────────

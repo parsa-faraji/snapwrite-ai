@@ -139,9 +139,8 @@
         message: "Enjoying SnapWrite AI? Share it with a friend! \uD83C\uDF89",
         actionLabel: "Share",
         dismissLabel: "Maybe Later",
-        onAction: () => {
-          navigator.clipboard.writeText(CHROME_STORE_URL);
-          // Brief feedback
+        onAction: async () => {
+          await copyToClipboard(CHROME_STORE_URL);
           const btn = shadow.querySelector(".qw-promo-action");
           if (btn) btn.textContent = "Link Copied!";
         },
@@ -418,12 +417,11 @@
       </div>`;
     positionResult();
 
-    result.querySelector(".qw-copy").addEventListener("click", () => {
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = result.querySelector(".qw-copy");
-        btn.innerHTML = `${ICONS.check} Copied!`;
-        setTimeout(() => (btn.innerHTML = `${ICONS.copy} Copy`), 1500);
-      });
+    result.querySelector(".qw-copy").addEventListener("click", async () => {
+      const btn = result.querySelector(".qw-copy");
+      const ok = await copyToClipboard(text);
+      btn.innerHTML = ok ? `${ICONS.check} Copied!` : `${ICONS.close} Failed`;
+      setTimeout(() => (btn.innerHTML = `${ICONS.copy} Copy`), 1500);
     });
 
     result.querySelector(".qw-insert").addEventListener("click", () => {
@@ -507,7 +505,7 @@
       }
     } catch {
       // Last resort: copy to clipboard
-      navigator.clipboard.writeText(text);
+      copyToClipboard(text);
     }
   }
 
@@ -515,6 +513,34 @@
     const div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  // Robust clipboard write: tries the async API, falls back to execCommand
+  // for pages where navigator.clipboard is blocked (file://, strict
+  // Permissions-Policy, unfocused document, etc).
+  async function copyToClipboard(text) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch {
+      // fall through to execCommand
+    }
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;opacity:0;pointer-events:none;";
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      const ok = document.execCommand("copy");
+      ta.remove();
+      return ok;
+    } catch {
+      return false;
+    }
   }
 
   // ── Styles ──────────────────────────────────────────────────────

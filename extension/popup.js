@@ -1,3 +1,28 @@
+async function copyToClipboard(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // fall through
+  }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;opacity:0;";
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy");
+    ta.remove();
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   // ── Load usage ──
   try {
@@ -101,11 +126,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     composeBtn.textContent = "Generate";
   });
 
-  composeCopy.addEventListener("click", () => {
-    navigator.clipboard.writeText(composeText.textContent).then(() => {
-      composeCopy.textContent = "Copied!";
-      setTimeout(() => (composeCopy.textContent = "Copy"), 1500);
-    });
+  composeCopy.addEventListener("click", async () => {
+    const ok = await copyToClipboard(composeText.textContent);
+    composeCopy.textContent = ok ? "Copied!" : "Failed";
+    setTimeout(() => (composeCopy.textContent = "Copy"), 1500);
   });
 
   // ── Footer links ──

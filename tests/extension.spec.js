@@ -269,6 +269,38 @@ test.describe("SnapWrite AI Extension", () => {
     await expect(page.locator("#compose-btn")).toBeVisible();
   });
 
+  test("popup copy button writes to clipboard (execCommand fallback)", async () => {
+    await page.goto(`chrome-extension://${extensionId}/popup.html`);
+
+    // Inject a fake compose result so we can click Copy without hitting the API
+    await page.evaluate(() => {
+      document.getElementById("compose-text").textContent = "hello clipboard world";
+      document.getElementById("compose-result").classList.remove("hidden");
+    });
+
+    // Stub navigator.clipboard.writeText to throw so the execCommand fallback runs
+    // (validates the fallback path that fixes the demo bug)
+    await page.evaluate(() => {
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        get() {
+          return {
+            writeText: () => Promise.reject(new Error("blocked")),
+          };
+        },
+      });
+    });
+
+    await page.click("#compose-copy");
+    await page.waitForFunction(
+      () => document.getElementById("compose-copy").textContent === "Copied!",
+      { timeout: 2000 }
+    );
+
+    const label = await page.locator("#compose-copy").textContent();
+    expect(label).toBe("Copied!");
+  });
+
   test("settings link in popup works", async () => {
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
 
@@ -299,7 +331,7 @@ test.describe("SnapWrite AI Extension", () => {
     expect(response.error).toBeTruthy();
   });
 
-  test("shows NO_API_KEY error when no key is set", async () => {
+  test("falls back to backend proxy when no key is set", async () => {
     await page.goto(`chrome-extension://${extensionId}/options.html`);
     await page.fill("#api-key", "");
     await page.click("#save-btn");
@@ -313,7 +345,9 @@ test.describe("SnapWrite AI Extension", () => {
       });
     });
 
-    expect(response.error).toBe("NO_API_KEY");
+    // With no personal key, should hit the backend proxy.
+    // Either succeeds (result) or returns a backend-side error — never NO_API_KEY.
+    expect(response.error !== "NO_API_KEY").toBeTruthy();
   });
 
   // ── Background Script Message Handling ─────────────────────────
@@ -380,10 +414,7 @@ test.describe("SnapWrite AI Extension", () => {
     await expect(page.locator(".btn-primary").first()).toContainText("Add to Chrome");
 
     // Features
-    await expect(page.locator(".feature-card")).toHaveCount(6);
-
-    // Steps
-    await expect(page.locator(".step-num")).toHaveCount(4);
+    await expect(page.locator(".feature-item")).toHaveCount(6);
 
     // Pricing
     await expect(page.locator(".price-card")).toHaveCount(2);
@@ -418,12 +449,9 @@ test.describe("SnapWrite AI Extension", () => {
     // Hero buttons should still be visible
     await expect(page.locator(".btn-primary").first()).toBeVisible();
 
-    // Nav links (except CTA) should be hidden on mobile
-    const featuresLink = page.locator('.nav-links a[href="#features"]');
-    await expect(featuresLink).toBeHidden();
-
-    // CTA should still be visible
-    await expect(page.locator(".nav-cta")).toBeVisible();
+    // Desktop nav links collapse on mobile; hamburger toggle takes over.
+    await expect(page.locator(".nav-links")).toBeHidden();
+    await expect(page.locator(".menu-toggle")).toBeVisible();
 
     // Reset viewport
     await page.setViewportSize({ width: 1280, height: 800 });

@@ -39,8 +39,27 @@
         { id: "translate_english", label: "English" },
       ],
     },
-    { id: "highlight", label: "Highlight", icon: "marker", local: true },
+    {
+      id: "highlight",
+      label: "Highlight",
+      icon: "marker",
+      local: true,
+      submenu: [
+        { id: "highlight_yellow", label: "Yellow" },
+        { id: "highlight_green", label: "Green" },
+        { id: "highlight_blue", label: "Blue" },
+        { id: "highlight_pink", label: "Pink" },
+        { id: "highlight_remove", label: "Remove" },
+      ],
+    },
   ];
+
+  const HIGHLIGHT_COLORS = {
+    highlight_yellow: "#fef08a",
+    highlight_green: "#bbf7d0",
+    highlight_blue: "#bfdbfe",
+    highlight_pink: "#fbcfe8",
+  };
 
   const ICONS = {
     wand: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287Z"/></svg>`,
@@ -363,6 +382,12 @@
     const sub = toolbar.querySelector(".qw-submenu");
     if (sub) sub.remove();
 
+    // Highlight actions don't hit the AI — handle locally.
+    if (actionId === "highlight" || actionId.startsWith("highlight_")) {
+      runLocalAction(actionId);
+      return;
+    }
+
     showLoading();
 
     try {
@@ -389,18 +414,22 @@
   // ── Local actions (no AI call, no quota) ────────────────────────
 
   function runLocalAction(actionId) {
-    if (actionId === "highlight") {
-      highlightSelection();
-      hideAll();
+    if (actionId === "highlight_remove") {
+      removeHighlightsInSelection();
+    } else {
+      const color = HIGHLIGHT_COLORS[actionId] || HIGHLIGHT_COLORS.highlight_yellow;
+      highlightSelection(color);
     }
+    hideAll();
   }
 
-  function highlightSelection() {
+  function highlightSelection(color) {
     if (!selectionRange) return;
     try {
       const mark = document.createElement("mark");
       mark.className = "snapwrite-highlight";
-      mark.style.cssText = "background:#fef08a !important;color:inherit !important;padding:0 2px;border-radius:2px;";
+      mark.dataset.color = color;
+      mark.style.cssText = `background:${color} !important;color:inherit !important;padding:0 2px;border-radius:2px;`;
       // Range may span across nodes; surroundContents fails on partial nodes,
       // so extract + wrap as a fallback.
       try {
@@ -415,6 +444,26 @@
     } catch {
       // Selection couldn't be wrapped (e.g., crosses non-editable boundaries).
     }
+  }
+
+  function removeHighlightsInSelection() {
+    if (!selectionRange) return;
+    const marks = document.querySelectorAll("mark.snapwrite-highlight");
+    let removed = 0;
+    marks.forEach((m) => {
+      // intersectsNode covers the case where the user selected the highlight,
+      // contains it, or even just clicked inside it.
+      const hit =
+        selectionRange.intersectsNode?.(m) ||
+        m.contains(selectionRange.startContainer) ||
+        m.contains(selectionRange.endContainer);
+      if (!hit) return;
+      while (m.firstChild) m.parentNode.insertBefore(m.firstChild, m);
+      m.remove();
+      removed++;
+    });
+    window.getSelection()?.removeAllRanges();
+    return removed;
   }
 
   // ── Result Panel ────────────────────────────────────────────────

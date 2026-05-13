@@ -123,3 +123,8 @@ The backend includes a `Dockerfile` and `railway.json` for one-click deployment 
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+
+## Add a short demo GIF or screenshots to the README
+
+Added per issue [#4](https://github.com/parsa-faraji/snapwrite-ai/issues/4).

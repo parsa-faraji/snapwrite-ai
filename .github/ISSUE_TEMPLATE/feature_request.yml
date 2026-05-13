@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest a user-facing improvement or new capability.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow is slow, confusing, or missing?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should SnapWrite do?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Extension toolbar
+        - Popup/options
+        - Backend proxy
+        - Website/docs
+        - Tests/CI
+        - Other

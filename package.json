@@ -4,11 +4,20 @@
   "description": "AI writing assistant Chrome extension -- improve, rewrite, reply, summarize, fix grammar, or translate any text on the web.",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ai-writing",
+    "chrome-extension",
+    "manifest-v3",
+    "openai",
+    "anthropic",
+    "productivity",
+    "writing-assistant"
+  ],
+  "author": "Parsa Faraji Alamouti",
+  "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.58.2"

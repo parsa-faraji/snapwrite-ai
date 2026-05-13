@@ -91,7 +91,7 @@ What makes it different:
 
 Tech stack: Chrome Extension (Manifest V3), Shadow DOM, OpenAI API, Node.js backend.
 
-Chrome Web Store link: [your link]
+Chrome Web Store link: https://chromewebstore.google.com/detail/snapwrite-ai/bpclponaiaeckhcpgfmojbkhkkgnlifg
 
 Happy to answer any questions about building Chrome extensions!
 
@@ -113,7 +113,7 @@ SnapWrite AI lets you select any text on any website and instantly:
 
 It's a Chrome extension — select text, toolbar pops up, click an action, done. No more copy-paste to ChatGPT.
 
-Free to try: [your link]
+Free to try: https://chromewebstore.google.com/detail/snapwrite-ai/bpclponaiaeckhcpgfmojbkhkkgnlifg
 
 ---
 
@@ -126,7 +126,7 @@ Select any text. Floating toolbar appears. One click to improve, rewrite, reply,
 
 No more copy-pasting to ChatGPT.
 
-Free Chrome extension: [link]
+Free Chrome extension: https://chromewebstore.google.com/detail/snapwrite-ai/bpclponaiaeckhcpgfmojbkhkkgnlifg
 
 Here's how it works:
 

@@ -22,7 +22,7 @@ A complete, production-ready Chrome extension that:
 1. Open Chrome and go to `chrome://extensions/`
 2. Enable **Developer mode** (toggle in top-right)
 3. Click **Load unpacked**
-4. Select the `extension` folder inside `quickwrite-ai`
+4. Select the `extension` folder inside `snapwrite-ai`
 5. The extension icon appears in your toolbar — click it
 6. Go to Settings and add your API key:
    - **OpenAI**: Get one at https://platform.openai.com/api-keys

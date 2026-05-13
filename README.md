@@ -4,122 +4,124 @@
 [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/snapwrite-ai/bpclponaiaeckhcpgfmojbkhkkgnlifg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)](extension/manifest.json)
-[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)](backend/package.json)
+[![Tests](https://img.shields.io/badge/Tests-Playwright-2ea44f)](tests/extension.spec.js)
+[![Good first issues](https://img.shields.io/github/issues/parsa-faraji/snapwrite-ai/good%20first%20issue?label=good%20first%20issues)](https://github.com/parsa-faraji/snapwrite-ai/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-**Your AI writing assistant, everywhere on the web.** Select any text on any website to instantly improve, rewrite, reply, summarize, fix grammar, or translate -- powered by OpenAI and Anthropic.
+AI writing help on any website. Select text, choose an action, and SnapWrite can improve, rewrite, reply, summarize, fix grammar, translate, or compose without making you copy-paste into a separate chat tab.
 
----
+## Why This Exists
+
+Most AI writing workflows are too slow:
+
+1. Select text.
+2. Copy it.
+3. Open another tab.
+4. Paste into a chatbot.
+5. Copy the result back.
+
+SnapWrite keeps that loop inside the page you are already using. It is built as a Chrome Extension Manifest V3 project with isolated UI, context-menu actions, keyboard shortcuts, optional bring-your-own-key mode, and a small backend proxy for hosted deployments.
 
 ## Features
 
-- **Improve Writing** -- Make text clearer, more engaging, and polished
-- **Fix Grammar** -- Correct spelling, punctuation, and grammar errors
-- **Rewrite** -- Professional, casual, shorter, or longer variants
-- **Reply** -- Generate thoughtful replies matching the original tone
-- **Summarize** -- Condense content into 2-3 key sentences
-- **Translate** -- Translate to 9 languages (Spanish, French, German, Portuguese, Chinese, Japanese, Korean, Arabic, English)
-- **Compose** -- Write from scratch via the popup
+- Improve writing for clarity and polish
+- Fix grammar, spelling, and punctuation
+- Rewrite as professional, casual, shorter, or longer
+- Generate contextual replies
+- Summarize long selected text
+- Translate to Spanish, French, German, Portuguese, Chinese, Japanese, Korean, Arabic, or English
+- Compose from scratch in the popup
+- Trigger from the floating toolbar, right-click context menu, or `Alt+Q`
+- Use a hosted backend proxy or direct OpenAI/Anthropic API keys
 
-## How It Works
+## Demo Flow
 
-1. **Select** any text on any webpage
-2. **Choose** an action from the floating toolbar
-3. **Copy or replace** the AI-generated result instantly
+1. Select text on any webpage.
+2. Pick an action from the SnapWrite toolbar.
+3. Copy or replace the result.
 
-## Project Structure
+The extension UI is injected through Shadow DOM so page styles do not leak into the toolbar.
 
-```
-snapwrite-ai/
-  extension/          # Chrome extension (Manifest V3)
-    manifest.json     # Extension manifest
-    background.js     # Service worker (API calls, usage tracking)
-    content.js        # Content script (toolbar UI via Shadow DOM)
-    popup.html/js/css # Extension popup
-    options.html/js/css # Settings page
-    icons/            # Extension icons
-  backend/            # Node.js API proxy server
-    server.js         # HTTP server (OpenAI + Anthropic)
-    Dockerfile        # Container config
-    railway.json      # Railway deployment config
-  website/            # Landing page & privacy policy
-    index.html        # Marketing landing page
-    privacy.html      # Privacy policy
-  tests/              # Playwright E2E tests
-    extension.spec.js # Extension integration tests
-    test-page.html    # Test fixture page
-```
+## Quick Start
 
-## Getting Started
+### Run The Extension Locally
 
-### Chrome Extension (Local Development)
+1. Open `chrome://extensions/`.
+2. Enable Developer mode.
+3. Click **Load unpacked**.
+4. Select the [`extension`](extension/) directory.
+5. Open the extension settings and add an API key, or configure `BACKEND_URL` in [`extension/background.js`](extension/background.js).
 
-1. Open `chrome://extensions/` in Chrome
-2. Enable **Developer mode** (top-right toggle)
-3. Click **Load unpacked** and select the `extension/` directory
-4. The extension icon appears in your toolbar
-
-### Backend API Proxy
-
-The backend server proxies AI requests so end-users don't need their own API keys.
+### Run The Backend Proxy
 
 ```bash
 cd backend
 cp .env.example .env
-# Edit .env with your API key(s)
 npm install
 npm run dev
 ```
 
-The server starts on `http://localhost:3001` by default.
+The backend starts at `http://localhost:3001` and accepts requests at `POST /api/generate`.
 
-#### Environment Variables
+Required environment:
 
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `OPENAI_API_KEY` | One of these | -- | OpenAI API key |
-| `ANTHROPIC_API_KEY` | required | -- | Anthropic API key |
-| `AI_PROVIDER` | No | `openai` | Default provider (`openai` or `anthropic`) |
-| `PORT` | No | `3001` | Server port |
-| `ALLOWED_ORIGINS` | No | `*` | Comma-separated allowed origins |
+| Variable | Required | Description |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | One provider key required | OpenAI API key |
+| `ANTHROPIC_API_KEY` | One provider key required | Anthropic API key |
+| `AI_PROVIDER` | No | Default provider: `openai` or `anthropic` |
+| `PORT` | No | Server port, default `3001` |
+| `ALLOWED_ORIGINS` | No | Comma-separated origins, default `*` |
 
-### Direct API Key Mode
+## Project Structure
 
-If no backend URL is configured, users can provide their own API key in the extension settings page (supports OpenAI and Anthropic).
+```text
+snapwrite-ai/
+  extension/          Chrome extension source
+  backend/            Node.js API proxy
+  website/            Landing page and privacy policy
+  tests/              Playwright extension tests
+```
 
-## Running Tests
-
-End-to-end tests use [Playwright](https://playwright.dev/) with a real Chrome instance:
+## Testing
 
 ```bash
 npm install
 npx playwright install chromium
-npx playwright test
+npm test
 ```
 
-> Note: Tests require headed mode (extensions cannot run in headless Chrome).
+The test suite launches Chromium with the extension loaded. Browser extensions require a headed browser context, so this may need a local desktop session.
 
-## Deployment
+## Privacy And Security
 
-### Backend (Railway)
+- Selected text is sent only when the user invokes an AI action.
+- The extension does not collect browsing history.
+- Usage limits and settings are stored locally with Chrome storage APIs.
+- Direct API keys are stored in browser sync storage.
+- The backend proxy forwards text to the configured AI provider and does not require a database.
 
-The backend includes a `Dockerfile` and `railway.json` for one-click deployment on [Railway](https://railway.app/):
+See [`SECURITY.md`](SECURITY.md) and [`website/privacy.html`](website/privacy.html) for details.
 
-1. Push the `backend/` directory to a Railway project
-2. Set environment variables (`OPENAI_API_KEY` and/or `ANTHROPIC_API_KEY`)
-3. Railway auto-deploys from the Dockerfile
+## Contributing
 
-### Chrome Web Store
+Contributions are welcome. Good first areas:
 
-1. Zip the `extension/` directory
-2. Upload to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)
+- Browser compatibility and edge-case fixes
+- Additional tests for selection, replacement, and options flows
+- Documentation improvements
+- Provider support and better error states
+- Privacy/security hardening
 
-## Tech Stack
+Read [`CONTRIBUTING.md`](CONTRIBUTING.md), then check [open issues](https://github.com/parsa-faraji/snapwrite-ai/issues).
 
-- **Extension**: Vanilla JavaScript, Shadow DOM, Chrome Extension Manifest V3
-- **Backend**: Node.js (native `http` module), OpenAI SDK, Anthropic REST API
-- **Testing**: Playwright
-- **Deployment**: Railway (Docker), Chrome Web Store
+## Roadmap
+
+- Firefox and Edge compatibility pass
+- Custom user-defined actions
+- Safer enterprise/team configuration
+- Better local-only mode for users who always bring their own API keys
+- More visual examples in the README and website
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+MIT License. See [`LICENSE`](LICENSE).

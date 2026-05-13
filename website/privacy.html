@@ -25,7 +25,7 @@
   <div class="wrap">
     <a href="index.html" class="back">&larr; Back to SnapWrite AI</a>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: March 17, 2026</p>
+    <p class="updated">Last updated: May 13, 2026</p>
 
     <h2>Overview</h2>
     <p>SnapWrite AI ("we", "our", "the extension") is a browser extension that helps users improve their writing using AI. We are committed to protecting your privacy and being transparent about our data practices.</p>
@@ -36,14 +36,19 @@
       <li><strong>Selected text:</strong> When you use an AI action, the selected text is sent to our AI provider (OpenAI or Anthropic) for processing. This text is NOT stored on our servers.</li>
       <li><strong>Usage count:</strong> We track how many AI actions you use per day, stored locally in your browser (chrome.storage). This never leaves your device.</li>
       <li><strong>API key (if provided):</strong> If you enter your own API key, it is stored locally in your browser's synced storage and sent only to the corresponding AI provider.</li>
-      <li><strong>Settings:</strong> Your preferences (AI provider, language) are stored locally in your browser.</li>
+      <li><strong>License state:</strong> If you activate Pro, your license key and validation status are stored in Chrome storage and checked against our backend.</li>
+      <li><strong>Settings:</strong> Your preferences, including AI provider and local prompt state, are stored locally in your browser.</li>
     </ul>
+
+    <h2>When Text Leaves Your Browser</h2>
+    <p>SnapWrite sends selected text only after you choose an AI action. The extension truncates AI requests to the first 5,000 characters. Highlight actions are local-only and do not call our backend, OpenAI, Anthropic, or Stripe.</p>
 
     <h2>Data We Do NOT Collect</h2>
     <ul>
       <li>We do NOT collect your browsing history</li>
       <li>We do NOT collect personal information (name, email, etc.) through the extension</li>
       <li>We do NOT track which websites you visit</li>
+      <li>We do NOT send full-page DOM snapshots</li>
       <li>We do NOT sell any data to third parties</li>
       <li>We do NOT use cookies or tracking pixels</li>
       <li>We do NOT store the text you process through AI actions</li>
@@ -55,10 +60,13 @@
       <li><strong>OpenAI</strong> — <a href="https://openai.com/privacy" target="_blank">Privacy Policy</a></li>
       <li><strong>Anthropic</strong> — <a href="https://www.anthropic.com/privacy" target="_blank">Privacy Policy</a></li>
     </ul>
-    <p>We encourage you to review their privacy policies. When using our backend proxy, text is routed through our server but is NOT logged or stored — it is immediately forwarded to the AI provider and discarded.</p>
+    <p>We encourage you to review their privacy policies. When using our backend proxy, text is routed through our server but is not stored in an application database. It is forwarded to the AI provider and discarded by the application after the response is returned.</p>
 
     <h2>Data Storage</h2>
-    <p>All extension data is stored locally in your browser using Chrome's built-in storage APIs (chrome.storage.local and chrome.storage.sync). We do not operate databases that store user data.</p>
+    <p>Extension data is stored in your browser using Chrome's built-in storage APIs (chrome.storage.local and chrome.storage.sync). Chrome sync storage may sync across browsers where you are signed into Chrome.</p>
+
+    <h2>Billing And License Data</h2>
+    <p>If you purchase Pro, Stripe processes billing data. SnapWrite uses Stripe customer metadata to store license key and license status. License validation requests do not include selected page text.</p>
 
     <h2>Permissions</h2>
     <p>The extension requests these permissions:</p>
@@ -66,7 +74,11 @@
       <li><strong>activeTab:</strong> To read selected text on the current page when you invoke an action</li>
       <li><strong>storage:</strong> To save your settings and usage count locally</li>
       <li><strong>contextMenus:</strong> To add right-click menu options for quick access</li>
+      <li><strong>Host permissions:</strong> To call OpenAI, Anthropic, and the SnapWrite backend depending on your selected mode</li>
     </ul>
+
+    <h2>Full Technical Model</h2>
+    <p>The open-source repository includes a detailed privacy and security model covering data flow, permissions, storage keys, backend endpoints, and known tradeoffs: <a href="https://github.com/parsa-faraji/snapwrite-ai/blob/main/docs/privacy-security.md" target="_blank">docs/privacy-security.md</a>.</p>
 
     <h2>Children's Privacy</h2>
     <p>Our extension is not directed at children under 13. We do not knowingly collect data from children.</p>

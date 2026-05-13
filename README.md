@@ -96,11 +96,13 @@ The test suite launches Chromium with the extension loaded. Browser extensions r
 
 - Selected text is sent only when the user invokes an AI action.
 - The extension does not collect browsing history.
-- Usage limits and settings are stored locally with Chrome storage APIs.
+- AI requests send at most the first 5,000 characters of selected text.
+- Highlight actions run locally and do not call an AI provider.
+- Usage limits, license state, and settings are stored with Chrome storage APIs.
 - Direct API keys are stored in browser sync storage.
 - The backend proxy forwards text to the configured AI provider and does not require a database.
 
-See [`SECURITY.md`](SECURITY.md) and [`website/privacy.html`](website/privacy.html) for details.
+See [`docs/privacy-security.md`](docs/privacy-security.md), [`SECURITY.md`](SECURITY.md), and [`website/privacy.html`](website/privacy.html) for details.
 
 ## Contributing
 

@@ -8,11 +8,14 @@ The current `main` branch is the supported development version.
 
 SnapWrite AI processes selected text only after the user invokes an action from the toolbar, context menu, popup, or keyboard shortcut.
 
-- Selected text is truncated before provider calls.
+- Selected text is truncated to 5,000 characters before provider calls.
+- Highlight actions run locally and do not call the backend or an AI provider.
 - The extension does not collect browsing history.
-- User settings and usage counters are stored with Chrome storage APIs.
+- User settings, license state, and usage counters are stored with Chrome storage APIs.
 - Bring-your-own API keys are stored in Chrome sync storage.
 - The backend proxy forwards requests to the selected AI provider and does not require a database.
+
+For the full data-flow and permission model, see [`docs/privacy-security.md`](docs/privacy-security.md).
 
 ## Reporting A Vulnerability
 
